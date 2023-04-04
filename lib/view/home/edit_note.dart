@@ -73,7 +73,7 @@ class ShowNote extends StatelessWidget {
                           controller: titleController,
                           maxLines: null,
                           decoration: InputDecoration.collapsed(
-                            hintText: "Title",
+                            hintText: "Tiêu đề ghi chú",
                           ),
                           style: TextStyle(
                             fontSize: 26.0,
@@ -89,7 +89,7 @@ class ShowNote extends StatelessWidget {
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           decoration: InputDecoration.collapsed(
-                            hintText: "Type something...",
+                            hintText: "Nhập nội dung nào đó ...",
                           ),
                           style: TextStyle(
                             fontSize: 20.0,
@@ -116,7 +116,7 @@ class ShowNote extends StatelessWidget {
               showSameContentDialog(context);
             }
           },
-          label: Text("Save"),
+          label: Text("Lưu"),
           icon: Icon(Icons.save),
         ));
   }
@@ -171,15 +171,15 @@ void showSameContentDialog(BuildContext context) {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         title: Text(
-          "No change in content!",
+          "Không có gì thay đổi!",
           style: Theme.of(context).textTheme.headline6,
         ),
-        content: Text("There is no change in content.",
+        content: Text("Nội dung chưa thay đổi gì.",
             style: Theme.of(context).textTheme.subtitle1),
         actions: <Widget>[
           TextButton(
             child: Text(
-              "Okay",
+              "Quay lại",
               style: Theme.of(context).textTheme.subtitle1,
             ),
             onPressed: () {

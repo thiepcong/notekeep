@@ -54,7 +54,7 @@ class NoteController extends GetxController {
   @override
   void onInit() {
     String? uid = Get.find<AuthController>().user?.uid;
-    print("NoteController onit :: $uid");
+    print("NoteController oninit :: $uid");
     noteList.bindStream(Database().noteStream(uid!));
     super.onInit();
   }

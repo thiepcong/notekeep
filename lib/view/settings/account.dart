@@ -4,7 +4,6 @@ import 'package:note_project/controllers/userController.dart';
 import 'package:get/get.dart';
 
 class Account extends StatelessWidget {
-  final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -50,35 +49,25 @@ class Account extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Hi, ${userController.user.name} !\n",
-                        style: TextStyle(
-                          color: Get.isDarkMode ? Colors.black : Colors.white,
-                          fontSize: 18,
-                        ),
-                      ),
-                      WidgetSpan(
-                          child: Icon(
-                            Icons.email,
-                            size: 14,
-                          ),
-                          alignment: PlaceholderAlignment.middle),
-                      TextSpan(
-                        text: "   ${userController.user.email}\n",
-                        style: TextStyle(
-                          color: Get.isDarkMode ? Colors.black : Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              Obx(() {
+                String name = Get.find<UserController>().user.name ;
+                if (name.isNotEmpty) {
+                  return ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 15,
+                    ),
+                    onTap: () {},
+                    title: Text("Chào ${name}"),
+                    leading: Icon(
+                      Icons.account_box_sharp,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+                  );
+                } else {
+                  // hiển thị khối lệnh này nếu dữ liệu chưa được load thành công
+                  return CircularProgressIndicator();
+                }
+              }),
               Divider(),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(
@@ -87,7 +76,7 @@ class Account extends StatelessWidget {
                 onTap: () {
                   showSignOutDialog(context);
                 },
-                title: Text("Logout"),
+                title: Text("Đăng xuất"),
                 leading: Icon(
                   Icons.power_settings_new_outlined,
                   color: Theme.of(context).iconTheme.color,
@@ -117,21 +106,21 @@ void showSignOutDialog(BuildContext context) async {
           ),
         ),
         title: Text(
-          "Are you sure you want to log out?",
+          "Bạn có chắc muốn đăng xuất?",
           style: TextStyle(
             color: Theme.of(context).buttonColor,
             fontSize: 20,
           ),
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.start,
         ),
         content: Text(
-          'Your notes are already saved so when logging back your noteswill be there.',
+          'Các ghi chú của bạn đã được lưu lại.',
           style: Theme.of(context).textTheme.bodyText1,
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[
-          ElevatedButton(
-            child: Text("Log Out",
+          TextButton(
+            child: Text("Đăng xuất",
                 style: TextStyle(
                   color: Theme.of(context).backgroundColor,
                   fontSize: 18,
@@ -147,7 +136,7 @@ void showSignOutDialog(BuildContext context) async {
             ),
           ),
           TextButton(
-            child: Text("Cancel",
+            child: Text("Quay lại",
                 style: TextStyle(
                   color: Theme.of(context).buttonColor,
                   fontSize: 18,
