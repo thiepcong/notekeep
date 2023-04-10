@@ -26,6 +26,7 @@ class MyHomePage extends GetWidget<AuthController> {
                 : Icons.search)),
             onPressed: () {
               searchController.isSearching.toggle();
+              noteController.searchQuery.value = "";
             },
           ),
         ],
@@ -38,95 +39,103 @@ class MyHomePage extends GetWidget<AuthController> {
             vertical: 10,
             horizontal: 16,
           ),
-          child:Obx(()=> Column(
-            children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        noteController.sortCheck.value = true;
-                        noteController.sortByTitle.toggle();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                          bottom: 5,
-                          left: 10,
-                          right: 10,
-                          top: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        child: Row(
-                          children: [
-                            Text('Tên',
-                                style: TextStyle(
+          child: Obx(() => Column(
+                children: [
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            noteController.sortCheck.value = true;
+                            noteController.sortByTitle.toggle();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              bottom: 5,
+                              left: 10,
+                              right: 10,
+                              top: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            child: Row(
+                              children: [
+                                Text('Tên',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary)),
+
+                                Icon(
+                                    noteController.sortByTitle.value
+                                        ? Icons.arrow_upward
+                                        : Icons.arrow_downward,
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .onPrimary)),
+                                        .onPrimary), // Icon
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            noteController.sortCheck.value = false;
+                            noteController.sortByDate.toggle();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              bottom: 5,
+                              left: 10,
+                              right: 10,
+                              top: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            child: Row(
+                              children: [
+                                Text('Ngày',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary)),
 
-                            Icon(noteController.sortByTitle.value?Icons.arrow_upward:Icons.arrow_downward,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary), // Icon
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        noteController.sortCheck.value = false;
-                        noteController.sortByDate.toggle();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                          bottom: 5,
-                          left: 10,
-                          right: 10,
-                          top: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        child: Row(
-                          children: [
-                            Text('Ngày',
-                                style: TextStyle(
+                                Icon(
+                                    noteController.sortByDate.value
+                                        ? Icons.arrow_upward
+                                        : Icons.arrow_downward,
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .onPrimary)),
-
-                            Icon(noteController.sortByDate.value?Icons.arrow_upward:Icons.arrow_downward,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary), // Icon
-                          ],
+                                        .onPrimary), // Icon
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              GetX<NoteController>(builder: (NoteController noteController) {
-                if (noteController != null && noteController.notes != null) {
-                  return NoteList();
-                } else {
-                  print("khong co gi");
-                  return Text("No notes, create some ");
-                }
-              }),
-            ],
-          )),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  GetX<NoteController>(
+                      builder: (NoteController noteController) {
+                    if (noteController != null &&
+                        noteController.notes != null) {
+                      return NoteList();
+                    } else {
+                      print("khong co gi");
+                      return Text("No notes, create some ");
+                    }
+                  }),
+                ],
+              )),
         ),
       ),
       floatingActionButton: FloatingActionButton(

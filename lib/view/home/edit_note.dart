@@ -4,6 +4,8 @@ import 'package:note_project/models/note.dart';
 import 'package:note_project/services/database.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
+import 'dart:ui';
 
 class ShowNote extends StatelessWidget {
   final NoteModel noteData;
@@ -21,6 +23,33 @@ class ShowNote extends StatelessWidget {
         DateFormat.yMMMd().format(noteData.creationDate.toDate());
     var time = DateFormat.jm().format(noteData.creationDate.toDate());
     return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Chỉnh sửa ghi chú",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  final RenderBox box = context.findRenderObject() as RenderBox;
+                  Share.share('${noteData.title}\n${noteData.body}',
+                      subject: noteData.title,
+                      sharePositionOrigin:
+                          box.localToGlobal(Offset.zero) & box.size);
+                },
+                icon: Icon(Icons.share)),
+            IconButton(
+              onPressed: () {
+                showDeleteDialog(context, noteData);
+              },
+              icon: Icon(Icons.delete),
+            ),
+          ],
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
         body: SafeArea(
           child: Container(
             padding: EdgeInsets.all(
@@ -29,35 +58,6 @@ class ShowNote extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).backgroundColor,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: Icon(Icons.arrow_back_ios_outlined),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).backgroundColor,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: IconButton(
-                        onPressed: () {
-                          showDeleteDialog(context, noteData);
-                        },
-                        icon: Icon(Icons.delete),
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(
                   height: 20,
                 ),

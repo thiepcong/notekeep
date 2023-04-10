@@ -4,10 +4,19 @@ import 'package:note_project/controllers/userController.dart';
 import 'package:get/get.dart';
 
 class Account extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Account",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -17,40 +26,11 @@ class Account extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).backgroundColor,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: Icon(Icons.arrow_back_ios_outlined),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 4,
-                    ),
-                    Text(
-                      "Account",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(
                 height: 20,
               ),
               Obx(() {
-                String name = Get.find<UserController>().user.name ;
+                String name = Get.find<UserController>().user.name;
                 if (name.isNotEmpty) {
                   return ListTile(
                     contentPadding: EdgeInsets.symmetric(
