@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:note_project/controllers/authController.dart';
+import 'package:note_project/controllers/auth_controller.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:note_project/models/note.dart';
 import 'package:note_project/services/database.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
-import 'dart:ui';
+import 'package:note_project/controllers/draw_controller.dart';
+import 'edit_draw.dart';
 
 class ShowNote extends StatelessWidget {
   final NoteModel noteData;
   final int index;
   ShowNote({required this.noteData, required this.index});
   final AuthController authController = Get.find<AuthController>();
+  final RxString imageUrl = "".obs;
+  final RxString paintUrl = "".obs;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController bodyController = TextEditingController();
+  final DrawingController drawController = Get.find<DrawingController>();
+  bool check = false;
 
   @override
   Widget build(BuildContext context) {
     titleController.text = noteData.title;
     bodyController.text = noteData.body;
+    if (noteData.imageUrl != null && noteData.imageUrl != "") {
+      imageUrl.value = noteData.imageUrl!;
+    }
+    if (noteData.paintUrl != null && noteData.paintUrl != "") {
+      paintUrl.value = noteData.paintUrl!;
+      drawController.paintUrl.value = noteData.paintUrl!;
+    } else
+      drawController.paintUrl.value = "";
+
     var formattedDate =
         DateFormat.yMMMd().format(noteData.creationDate.toDate());
     var time = DateFormat.jm().format(noteData.creationDate.toDate());
@@ -50,6 +66,44 @@ class ShowNote extends StatelessWidget {
           ],
           backgroundColor: Theme.of(context).primaryColor,
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          // backgroundColor: Them,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt),
+              label: 'Chụp hình ảnh',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.image),
+              label: 'Thêm hình ảnh',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.music_note),
+              label: 'Thêm âm thanh',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.brush),
+              label: 'Vẽ',
+            ),
+          ],
+          onTap: (int index) {
+            switch (index) {
+              case 0:
+                captureImage(context);
+                break;
+              case 1:
+                selectImage(context);
+                break;
+              case 2:
+                // Xử lý khi người dùng chọn thêm âm thanh
+                break;
+              case 3:
+                drawController.drawingPoints.clear();
+                Get.to(() => EditDrawPage());
+                break;
+            }
+          },
+        ),
         body: SafeArea(
           child: Container(
             padding: EdgeInsets.all(
@@ -65,6 +119,81 @@ class ShowNote extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Stack(
+                          children: [
+                            Obx(() => (check)
+                                ? (Image.file(File(imageUrl.value)))
+                                : (((imageUrl.value != "")
+                                    ? Image.network(
+                                        imageUrl.value,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) =>
+                                                loadingProgress == null
+                                                    ? child
+                                                    : Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                      )
+                                    : (paintUrl.value != "")
+                                        ? Image.network(
+                                            paintUrl.value,
+                                            fit: BoxFit.cover,
+                                            loadingBuilder: (context, child,
+                                                    loadingProgress) =>
+                                                loadingProgress == null
+                                                    ? child
+                                                    : Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                          )
+                                        : SizedBox()))),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("Xóa?"),
+                                          content: Text(
+                                              "Bạn có chắc chắn muốn xóa?"),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(false),
+                                              child: Text("Không"),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                if (check) {
+                                                  check = !check;
+                                                  imageUrl.value = "";
+                                                } else if (imageUrl.value !=
+                                                    "") {
+                                                  imageUrl.value == "";
+                                                } else if (paintUrl.value !=
+                                                    "") {
+                                                  paintUrl.value == "";
+                                                }
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: Text("Có"),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: Icon(Icons.clear),
+                              ),
+                            ),
+                          ],
+                        ),
                         Text("$formattedDate at $time"),
                         SizedBox(
                           height: 10,
@@ -105,20 +234,59 @@ class ShowNote extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            if (titleController.text != noteData.title ||
-                bodyController.text != noteData.body) {
-              Database().updateNote(authController.user!.uid,
-                  titleController.text, bodyController.text, noteData.id);
-              Get.back();
-              titleController.clear();
-              bodyController.clear();
-            } else {
-              showSameContentDialog(context);
-            }
+            saveNote(context);
           },
           label: Text("Lưu"),
           icon: Icon(Icons.save),
         ));
+  }
+
+  void saveNote(BuildContext context) async {
+    if (titleController.text == noteData.title &&
+        bodyController.text == noteData.body &&
+        imageUrl.value == noteData.imageUrl) {
+      showSameContentDialog(context);
+    } else {
+      if (check)
+        Database().updateNote(
+            authController.user!.uid,
+            titleController.text,
+            bodyController.text,
+            noteData.id,
+            File(imageUrl.value),
+            null,
+            drawController.paint);
+      else
+        Database().updateNote(authController.user!.uid, titleController.text,
+            bodyController.text, noteData.id, null, null, drawController.paint);
+      // Get.off(() => BottomBar(), transition: Transition.fadeIn);
+      Get.back();
+      titleController.clear();
+      bodyController.clear();
+      imageUrl.value = "";
+    }
+  }
+
+  Future<void> selectImage(BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      imageUrl.value = pickedFile.path;
+      check = true;
+      print(imageUrl.value);
+    }
+  }
+
+  Future<void> captureImage(BuildContext context) async {
+    final ImagePicker imagePicker = ImagePicker();
+
+    final pickedFile = await imagePicker.getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      imageUrl.value = pickedFile.path;
+      check = true;
+    }
   }
 }
 

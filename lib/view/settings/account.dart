@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:note_project/controllers/authController.dart';
-import 'package:note_project/controllers/userController.dart';
+import 'package:note_project/controllers/auth_controller.dart';
+import 'package:note_project/controllers/user_controller.dart';
 import 'package:get/get.dart';
 
 class Account extends StatelessWidget {
+  UserController userController = Get.find<UserController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +32,7 @@ class Account extends StatelessWidget {
                 height: 20,
               ),
               Obx(() {
-                String name = Get.find<UserController>().user.name;
+                String name = userController.user.name;
                 if (name.isNotEmpty) {
                   return ListTile(
                     contentPadding: EdgeInsets.symmetric(

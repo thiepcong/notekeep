@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_project/controllers/authController.dart';
+import 'package:note_project/controllers/auth_controller.dart';
 import 'package:note_project/view/autho/login.dart';
 import 'package:note_project/view/home/home.dart';
 import 'package:get/get.dart';

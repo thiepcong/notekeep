@@ -1,11 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:note_project/controllers/authController.dart';
-import 'package:note_project/controllers/noteControler.dart';
+import 'package:note_project/controllers/auth_controller.dart';
+import 'package:note_project/controllers/note_controler.dart';
 import 'package:note_project/view/home/edit_note.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 
 class NoteList extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
@@ -55,6 +56,32 @@ class NoteList extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  Obx(() => (noteController.notes[index].imageUrl != null &&
+                          noteController.notes[index].imageUrl != "")
+                      ? Image.network(
+                          noteController.notes[index].imageUrl!,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) =>
+                              loadingProgress == null
+                                  ? child
+                                  : Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                        )
+                      : (noteController.notes[index].paintUrl != null &&
+                              noteController.notes[index].paintUrl != "")
+                          ? Image.network(
+                              noteController.notes[index].paintUrl!,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (context, child,
+                                      loadingProgress) =>
+                                  loadingProgress == null
+                                      ? child
+                                      : Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                            )
+                          : SizedBox()),
                   ListTile(
                     contentPadding: EdgeInsets.only(
                       top: 5,

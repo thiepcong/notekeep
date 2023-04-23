@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:note_project/controllers/noteControler.dart';
-import 'package:note_project/view/home/note_list.dart';
-import 'package:note_project/view/home/add_note.dart';
-import 'package:note_project/controllers/authController.dart';
-import 'package:note_project/view/home/app_drawer.dart';
+import 'package:note_project/controllers/note_controler.dart';
+import 'note_list.dart';
+import 'add_note.dart';
+import 'package:note_project/controllers/auth_controller.dart';
+import 'app_drawer.dart';
+import 'add_category.dart';
+import 'package:note_project/controllers/draw_controller.dart';
+import 'add_draw.dart';
 
 class MyHomePage extends GetWidget<AuthController> {
   final AuthController authController = Get.find<AuthController>();
   final NoteController noteController =
       Get.put<NoteController>(NoteController());
+  final DrawingController drawController = Get.put(DrawingController());
   final SearchController searchController = Get.put(SearchController());
 
   @override
@@ -26,7 +30,8 @@ class MyHomePage extends GetWidget<AuthController> {
                 : Icons.search)),
             onPressed: () {
               searchController.isSearching.toggle();
-              noteController.searchQuery.value = "";
+              if (!searchController.isSearching.value)
+                noteController.searchQuery.value = "";
             },
           ),
         ],
@@ -138,24 +143,60 @@ class MyHomePage extends GetWidget<AuthController> {
               )),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-          tooltip: "Add Note",
-          heroTag: "thêm ghi chú",
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: () {
-            Get.to(() => AddNotePage());
-          },
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.onPrimary,
-            size: 30,
-          )),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            tooltip: 'thêm ghi chú',
+            heroTag: "thêm ghi chú",
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: () {
+              Get.to(() => AddNotePage());
+            },
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 30,
+            ),
+          ),
+          // SizedBox(height: 10),
+          // FloatingActionButton(
+          //   tooltip: "thêm danh sách",
+          //   heroTag: "thêm danh sách",
+          //   backgroundColor: Theme.of(context).primaryColor,
+          //   onPressed: () {
+          //     Get.to(() => AddListPage());
+          //   },
+          //   child: Icon(
+          //     Icons.playlist_add,
+          //     color: Theme.of(context).colorScheme.onPrimary,
+          //     size: 30,
+          //   ),
+          // ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: "vẽ",
+            tooltip: 'vẽ',
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: () {
+              Get.to(() => AddDrawPage());
+              // Thêm mã để chuyển sang trang vẽ
+            },
+            child: Icon(
+              Icons.brush,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 30,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildSearchField() {
     return TextField(
-      controller: searchController.searchQueryController,
+      controller: TextEditingController(),
+      //controller: searchController.searchQueryController,
       autofocus: true,
       decoration: InputDecoration(
         hintText: 'Tìm theo tiêu đề',

@@ -1,5 +1,5 @@
 import 'package:note_project/models/user.dart';
-import 'package:note_project/controllers/authController.dart';
+import 'package:note_project/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 

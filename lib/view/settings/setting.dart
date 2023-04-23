@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_project/controllers/authController.dart';
+import 'package:note_project/controllers/auth_controller.dart';
 import 'package:note_project/view/home/home.dart';
 import 'package:note_project/view/settings/account.dart';
 import 'package:note_project/view/settings/dark_mode.dart';

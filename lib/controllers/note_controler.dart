@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:note_project/models/note.dart';
 import 'package:note_project/services/database.dart';
-import 'package:note_project/controllers/authController.dart';
+import 'package:note_project/controllers/auth_controller.dart';
+import 'dart:io';
 
 class NoteController extends GetxController {
   RxList<NoteModel> noteList = RxList<NoteModel>();
@@ -20,14 +21,17 @@ class NoteController extends GetxController {
       return getSortedNotes();
     }
   }
+
   //xu ly sap xep
   List<NoteModel> getSortedNotes() {
     var sortedNotes = noteList.value;
     if (sortCheck.value) {
       if (sortByTitle.value) {
-        sortedNotes.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+        sortedNotes.sort(
+            (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
       } else {
-        sortedNotes.sort((a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()));
+        sortedNotes.sort(
+            (a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()));
       }
     } else {
       if (sortByDate.value) {
@@ -50,6 +54,12 @@ class NoteController extends GetxController {
     sortByTitle.value = !sortByTitle.value;
   }
   //end xu ly sap xep
+
+  // Xóa các giá trị đầu vào sau khi ghi chú được thêm
+  void clearInputs() {
+    titleController.value.clear();
+    bodyController.value.clear();
+  }
 
   @override
   void onInit() {
