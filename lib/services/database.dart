@@ -66,8 +66,7 @@ class Database {
         });
       }
       if (bytes != null) {
-        final FirebaseStorage storage = FirebaseStorage.instance;
-        Reference ref = storage.ref().child('paint/$uid/$uuid.png');
+        Reference ref = _storage.ref().child('paint/$uid/$uuid.png');
         UploadTask uploadTask = ref.putData(bytes);
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
         String paintUrl = await taskSnapshot.ref.getDownloadURL();

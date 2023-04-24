@@ -49,7 +49,7 @@ class AddAudio extends StatelessWidget {
           try {
             Reference ref =
                 FirebaseStorage.instance.ref().child('audio/audio.3gpp');
-            UploadTask uploadTask = ref.putFile(audioController.audioFile!);
+            UploadTask uploadTask = ref.putFile(audioController.audioFile.value!);
             await uploadTask.whenComplete(() async {
               String audioUrl = await ref.getDownloadURL();
               audioController.urlAudioTmp.value = audioUrl;

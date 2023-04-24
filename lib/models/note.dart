@@ -6,7 +6,7 @@ class NoteModel {
   late String body;
   late Timestamp creationDate;
   String? imageUrl;
-  String? recordingUrl;
+  String? audioUrl;
   String? paintUrl;
 
   NoteModel(
@@ -14,7 +14,7 @@ class NoteModel {
       this.title = '',
       this.body = '',
       this.imageUrl,
-      this.recordingUrl,
+      this.audioUrl,
       this.paintUrl,
       required this.creationDate});
 
@@ -28,8 +28,8 @@ class NoteModel {
     if (data != null && data.containsKey("imageUrl")) {
       imageUrl = data["imageUrl"];
     }
-    if (data != null && data.containsKey("recordingUrl")) {
-      recordingUrl = data["recordingUrl"];
+    if (data != null && data.containsKey("audioUrl")) {
+      audioUrl = data["audioUrl"];
     }
     if (data != null && data.containsKey("paintUrl")) {
       paintUrl = data["paintUrl"];

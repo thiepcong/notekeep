@@ -156,7 +156,7 @@ class EditDrawPage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () async {
-                        drawController.paint = (await _captureScreenshot())!;
+                        drawController.paint.value = (await _captureScreenshot())!;
                         Get.back();
                       },
                       child: Container(

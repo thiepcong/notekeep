@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class AudioController extends GetxController {
-  late final File? audioFile;
+  Rx<File?> audioFile = Rx<File?>(null);
   RxString urlAudioTmp = "".obs;
   final progress = 0.0.obs;
   bool isRecoderReady = false;
@@ -66,8 +66,8 @@ class AudioController extends GetxController {
   Future<void> stopRecording() async {
     if (!isRecording.value) return null;
     final path = await recorder.stopRecorder();
-    audioFile = File(path!);
-    // duration.value = Duration.zero;
+    audioFile.value = File(path!);
+    duration.value = Duration.zero;
     isRecording.value = false;
     print("audio file" + audioFile.toString());
   }

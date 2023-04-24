@@ -1,35 +1,24 @@
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 import 'package:note_project/controllers/auth_controller.dart';
 import 'package:note_project/controllers/note_controler.dart';
 import 'package:note_project/services/database.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:note_project/view/home/add_draw.dart';
 import 'package:note_project/controllers/draw_controller.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:note_project/controllers/audio_controller.dart';
 import 'add_audio.dart';
 
 class AddNotePage extends StatelessWidget {
   AudioController audioController = Get.put(AudioController());
+  DrawingController drawController = Get.put(DrawingController());
   final AuthController authController = Get.find<AuthController>();
   final NoteController noteController = Get.find<NoteController>();
-  final DrawingController drawController = Get.find<DrawingController>();
+
   final TextEditingController titleController = TextEditingController();
   final TextEditingController bodyController = TextEditingController();
   final Rx<File?> image = Rx<File?>(null);
-  late String mp3Path;
-  bool isRecording = false;
-  int checkAdd = -1;
-  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +35,7 @@ class AddNotePage extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        // backgroundColor: Them,
+        type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.camera_alt),
@@ -74,14 +63,9 @@ class AddNotePage extends StatelessWidget {
               selectImage(context);
               break;
             case 2:
-              isRecording = false;
-              // await initRecorder();
-              // recording(context);
               Get.to(() => AddAudio());
-              // print('mp3: ' + );
               break;
             case 3:
-              drawController.drawingPoints.clear();
               Get.to(() => AddDrawPage());
               break;
           }
@@ -101,22 +85,96 @@ class AddNotePage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Obx(() => (image.value != null)
-                        ? Image.file(image.value!)
-                        : SizedBox()),
-                    // Obx(() => (drawController.paintUrl.value != null &&
-                    //         drawController.paintUrl.value != "")
-                    //     ? Image.network(
-                    //         drawController.paintUrl.value,
-                    //         fit: BoxFit.cover,
-                    //         loadingBuilder: (context, child, loadingProgress) =>
-                    //             loadingProgress == null
-                    //                 ? child
-                    //                 : Center(
-                    //                     child: CircularProgressIndicator(),
-                    //                   ),
-                    //       )
-                    //     : SizedBox()),
+                    Stack(
+                      children: [
+                        Obx(() => (image.value != null)
+                            ? Image.file(image.value!)
+                            : SizedBox()),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("Xóa?"),
+                                      content:
+                                          Text("Bạn có chắc chắn muốn xóa?"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: Text("Không"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            image.value = null;
+                                            Navigator.of(context).pop(true);
+                                          },
+                                          child: Text("Có"),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Icon(Icons.clear),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        Obx(() => (drawController.paintUrl.value != null &&
+                                drawController.paintUrl.value != "")
+                            ? Image.network(
+                                drawController.paintUrl.value,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child,
+                                        loadingProgress) =>
+                                    loadingProgress == null
+                                        ? child
+                                        : Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                              )
+                            : SizedBox()),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("Xóa?"),
+                                      content:
+                                          Text("Bạn có chắc chắn muốn xóa?"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: Text("Không"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            drawController.paintUrl.value = "";
+                                            drawController.clear();
+                                            Navigator.of(context).pop(true);
+                                          },
+                                          child: Text("Có"),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Icon(Icons.clear),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 20),
                     TextFormField(
                       maxLines: null,
@@ -182,9 +240,37 @@ class AddNotePage extends StatelessWidget {
                                         },
                                         icon: Icon(Icons.stop)),
                                     IconButton(
-                                        onPressed: () {
-                                          audioController.stopPlayer();
-                                          Get.back();
+                                        onPressed: () async {
+                                          await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text("Xóa?"),
+                                                  content: Text(
+                                                      "Bạn có chắc chắn muốn xóa?"),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.of(context)
+                                                              .pop(false),
+                                                      child: Text("Không"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        audioController
+                                                            .urlAudioTmp
+                                                            .value = "";
+                                                        audioController
+                                                            .audioFile
+                                                            .value = null;
+                                                        Navigator.of(context)
+                                                            .pop(true);
+                                                      },
+                                                      child: Text("Có"),
+                                                    ),
+                                                  ],
+                                                );
+                                              });
                                         },
                                         icon: Icon(Icons.close)),
                                   ],
@@ -219,13 +305,14 @@ class AddNotePage extends StatelessWidget {
       showEmptyTitleDialog(context);
       return;
     }
+
     Database().addNote(
         authController.user!.uid,
         titleController.value.text.trim(),
         bodyController.value.text.trim(),
         image.value,
-        null,
-        drawController.paint);
+        audioController.audioFile.value,
+        drawController.paint.value);
     Get.back();
   }
 

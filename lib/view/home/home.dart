@@ -11,9 +11,7 @@ import 'add_draw.dart';
 
 class MyHomePage extends GetWidget<AuthController> {
   final AuthController authController = Get.find<AuthController>();
-  final NoteController noteController =
-      Get.put<NoteController>(NoteController());
-  final DrawingController drawController = Get.put(DrawingController());
+  final NoteController noteController = Get.put(NoteController());
   final SearchController searchController = Get.put(SearchController());
 
   @override
@@ -161,33 +159,19 @@ class MyHomePage extends GetWidget<AuthController> {
           ),
           // SizedBox(height: 10),
           // FloatingActionButton(
-          //   tooltip: "thêm danh sách",
-          //   heroTag: "thêm danh sách",
+          //   heroTag: "vẽ",
+          //   tooltip: 'vẽ',
           //   backgroundColor: Theme.of(context).primaryColor,
           //   onPressed: () {
-          //     Get.to(() => AddListPage());
+          //     Get.to(() => AddDrawPage());
+          //     // Thêm mã để chuyển sang trang vẽ
           //   },
           //   child: Icon(
-          //     Icons.playlist_add,
+          //     Icons.brush,
           //     color: Theme.of(context).colorScheme.onPrimary,
           //     size: 30,
           //   ),
           // ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: "vẽ",
-            tooltip: 'vẽ',
-            backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () {
-              Get.to(() => AddDrawPage());
-              // Thêm mã để chuyển sang trang vẽ
-            },
-            child: Icon(
-              Icons.brush,
-              color: Theme.of(context).colorScheme.onPrimary,
-              size: 30,
-            ),
-          ),
         ],
       ),
     );

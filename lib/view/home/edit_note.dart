@@ -7,7 +7,9 @@ import 'package:note_project/services/database.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
+import 'package:note_project/view/home/add_audio.dart';
 import 'package:note_project/controllers/draw_controller.dart';
+import 'package:note_project/controllers/audio_controller.dart';
 import 'edit_draw.dart';
 
 class ShowNote extends StatelessWidget {
@@ -17,10 +19,14 @@ class ShowNote extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
   final RxString imageUrl = "".obs;
   final RxString paintUrl = "".obs;
+  final RxString audioUrl = "".obs;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController bodyController = TextEditingController();
-  final DrawingController drawController = Get.find<DrawingController>();
-  bool check = false;
+  AudioController audioController = Get.put(AudioController());
+  final DrawingController drawController = Get.put(DrawingController());
+  bool checkIn = false;
+  bool isDeletepaint = false;
+  bool isDeleteaudio = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +38,12 @@ class ShowNote extends StatelessWidget {
     if (noteData.paintUrl != null && noteData.paintUrl != "") {
       paintUrl.value = noteData.paintUrl!;
       drawController.paintUrl.value = noteData.paintUrl!;
-    } else
-      drawController.paintUrl.value = "";
+    }
+    if (noteData.audioUrl != null && noteData.audioUrl != "") {
+      audioUrl.value = noteData.audioUrl!;
+      print("audio file: " + noteData.audioUrl!);
+      audioController.urlAudioTmp.value = noteData.audioUrl!;
+    }
 
     var formattedDate =
         DateFormat.yMMMd().format(noteData.creationDate.toDate());
@@ -67,7 +77,7 @@ class ShowNote extends StatelessWidget {
           backgroundColor: Theme.of(context).primaryColor,
         ),
         bottomNavigationBar: BottomNavigationBar(
-          // backgroundColor: Them,
+          type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.camera_alt),
@@ -95,10 +105,9 @@ class ShowNote extends StatelessWidget {
                 selectImage(context);
                 break;
               case 2:
-                // Xử lý khi người dùng chọn thêm âm thanh
+                Get.to(() => AddAudio());
                 break;
               case 3:
-                drawController.drawingPoints.clear();
                 Get.to(() => EditDrawPage());
                 break;
             }
@@ -121,35 +130,25 @@ class ShowNote extends StatelessWidget {
                       children: [
                         Stack(
                           children: [
-                            Obx(() => (check)
-                                ? (Image.file(File(imageUrl.value)))
-                                : (((imageUrl.value != "")
-                                    ? Image.network(
-                                        imageUrl.value,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) =>
-                                                loadingProgress == null
-                                                    ? child
-                                                    : Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      ),
-                                      )
-                                    : (paintUrl.value != "")
-                                        ? Image.network(
-                                            paintUrl.value,
-                                            fit: BoxFit.cover,
-                                            loadingBuilder: (context, child,
-                                                    loadingProgress) =>
-                                                loadingProgress == null
-                                                    ? child
-                                                    : Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      ),
-                                          )
-                                        : SizedBox()))),
+                            Obx(() {
+                              if (checkIn)
+                                return Image.file(File(imageUrl.value));
+                              else if (imageUrl.value != "")
+                                return Image.network(
+                                  imageUrl.value,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) =>
+                                          loadingProgress == null
+                                              ? child
+                                              : Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                );
+                              else
+                                return SizedBox();
+                            }),
                             Positioned(
                               top: 0,
                               right: 0,
@@ -171,16 +170,60 @@ class ShowNote extends StatelessWidget {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                if (check) {
-                                                  check = !check;
-                                                  imageUrl.value = "";
-                                                } else if (imageUrl.value !=
-                                                    "") {
-                                                  imageUrl.value == "";
-                                                } else if (paintUrl.value !=
-                                                    "") {
-                                                  paintUrl.value == "";
-                                                }
+                                                imageUrl.value = "";
+                                                checkIn = false;
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: Text("Có"),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: Icon(Icons.clear),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Stack(
+                          children: [
+                            Obx(() => (paintUrl.value != "")
+                                ? Image.network(
+                                    paintUrl.value,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) =>
+                                            loadingProgress == null
+                                                ? child
+                                                : Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                  )
+                                : SizedBox()),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("Xóa?"),
+                                          content: Text(
+                                              "Bạn có chắc chắn muốn xóa?"),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(false),
+                                              child: Text("Không"),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                isDeletepaint = true;
+                                                paintUrl.value = "";
                                                 Navigator.of(context).pop(true);
                                               },
                                               child: Text("Có"),
@@ -224,6 +267,81 @@ class ShowNote extends StatelessWidget {
                             fontSize: 20.0,
                           ),
                         ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        Obx(() => (audioUrl.value != "")
+                            ? Container(
+                                color: Colors.green,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    LinearProgressIndicator(
+                                      value: audioController.progress.value,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                            onPressed: () async {
+                                              if (!audioController
+                                                  .isPlaying.value)
+                                                await audioController
+                                                    .startPlayerFromURL(
+                                                        audioController
+                                                            .urlAudioTmp.value);
+                                            },
+                                            icon: Icon((!audioController
+                                                    .isPlaying.value)
+                                                ? Icons.play_arrow
+                                                : Icons.pause)),
+                                        IconButton(
+                                            onPressed: () {
+                                              audioController.stopPlayer();
+                                            },
+                                            icon: Icon(Icons.stop)),
+                                        IconButton(
+                                            onPressed: () async {
+                                              await showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: Text("Xóa?"),
+                                                      content: Text(
+                                                          "Bạn có chắc chắn muốn xóa?"),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(false),
+                                                          child: Text("Không"),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            isDeleteaudio =
+                                                                true;
+                                                            audioUrl.value = "";
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(true);
+                                                          },
+                                                          child: Text("Có"),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  });
+                                            },
+                                            icon: Icon(Icons.close)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : SizedBox())
                       ],
                     ),
                   ),
@@ -247,23 +365,32 @@ class ShowNote extends StatelessWidget {
         imageUrl.value == noteData.imageUrl) {
       showSameContentDialog(context);
     } else {
-      if (check)
+      if (isDeletepaint) drawController.paint.value = null;
+      if (isDeleteaudio) audioController.audioFile.value = null;
+      if (checkIn || imageUrl.value != "")
         Database().updateNote(
             authController.user!.uid,
             titleController.text,
             bodyController.text,
             noteData.id,
             File(imageUrl.value),
-            null,
-            drawController.paint);
+            audioController.audioFile.value,
+            drawController.paint.value);
       else
-        Database().updateNote(authController.user!.uid, titleController.text,
-            bodyController.text, noteData.id, null, null, drawController.paint);
-      // Get.off(() => BottomBar(), transition: Transition.fadeIn);
+        Database().updateNote(
+            authController.user!.uid,
+            titleController.text,
+            bodyController.text,
+            noteData.id,
+            null,
+            audioController.audioFile.value,
+            drawController.paint.value);
       Get.back();
       titleController.clear();
       bodyController.clear();
       imageUrl.value = "";
+      paintUrl.value = "";
+      audioUrl.value = "";
     }
   }
 
@@ -272,7 +399,7 @@ class ShowNote extends StatelessWidget {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       imageUrl.value = pickedFile.path;
-      check = true;
+      checkIn = true;
       print(imageUrl.value);
     }
   }
@@ -285,7 +412,7 @@ class ShowNote extends StatelessWidget {
     );
     if (pickedFile != null) {
       imageUrl.value = pickedFile.path;
-      check = true;
+      checkIn = true;
     }
   }
 }

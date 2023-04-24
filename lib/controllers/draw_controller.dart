@@ -8,7 +8,7 @@ class DrawingController extends GetxController {
   final _color = Colors.black.obs;
   final _thickness = 5.0.obs;
   RxString paintUrl = "".obs;
-  late Uint8List paint;
+  Rx<Uint8List?> paint = Rx<Uint8List?>(null);
 
   RxList<List<DrawingPoint>> get drawingPoints {
     return _points;
@@ -43,9 +43,6 @@ class DrawingController extends GetxController {
         break;
       }
     }
-    // _points.last.clear();
-    // List<DrawingPoint> newDrawingPointList = [];
-    // _points.add(newDrawingPointList);
     update();
   }
 
