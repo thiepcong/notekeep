@@ -56,6 +56,9 @@ class NoteList extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 8,
+                  ),
                   Obx(() => (noteController.notes[index].imageUrl != null &&
                           noteController.notes[index].imageUrl != "")
                       ? Image.network(
@@ -117,6 +120,7 @@ class NoteList extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      
                       Text(
                         formattedDate,
                         style: TextStyle(

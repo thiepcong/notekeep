@@ -156,7 +156,19 @@ class EditDrawPage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () async {
-                        drawController.paint.value = (await _captureScreenshot())!;
+                        drawController.paint.value =
+                            (await _captureScreenshot())!;
+                        Reference ref = FirebaseStorage.instance
+                            .ref()
+                            .child('paint/paint.png');
+                        UploadTask uploadTask =
+                            ref.putData(drawController.paint.value!);
+                        TaskSnapshot taskSnapshot =
+                            await uploadTask.whenComplete(() async {
+                          drawController.paintUrl.value =
+                              await ref.getDownloadURL();
+                        });
+
                         Get.back();
                       },
                       child: Container(

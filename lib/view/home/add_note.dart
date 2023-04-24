@@ -229,6 +229,11 @@ class AddNotePage extends StatelessWidget {
                                                 .startPlayerFromURL(
                                                     audioController
                                                         .urlAudioTmp.value);
+                                          else {
+                                            await audioController.pausePlayer();
+                                            await audioController
+                                                .seekToPlayer(500);
+                                          }
                                         },
                                         icon: Icon(
                                             (!audioController.isPlaying.value)

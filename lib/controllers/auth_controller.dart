@@ -13,7 +13,7 @@ class AuthController extends GetxController {
   TextEditingController password = TextEditingController();
   String usersCollection = "users";
   Rx<UserModel> userModel = UserModel().obs;
-  Rx<int> axisCount = 4.obs;
+  Rx<int> axisCount = 2.obs;
 
   User? get user => _firebaseUser.value;
 
@@ -63,7 +63,8 @@ class AuthController extends GetxController {
       Get.find<UserController>().user =
           await Database().getUser(userCredential.user!.uid);
       _clearControllers();
-    } catch (e) {print(e);
+    } catch (e) {
+      print(e);
       Get.snackbar(
         'Error logging in',
         '${e.toString()}',
@@ -76,7 +77,8 @@ class AuthController extends GetxController {
     try {
       await _auth.signOut();
       Get.find<UserController>().user = UserModel();
-    } catch (e) {//print(e);
+    } catch (e) {
+      //print(e);
       Get.snackbar(
         'Error signing out',
         '${e.toString()}',

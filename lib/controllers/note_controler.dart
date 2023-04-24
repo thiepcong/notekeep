@@ -13,7 +13,7 @@ class NoteController extends GetxController {
   List<NoteModel> get notes {
     if (searchQuery.value.isNotEmpty) {
       return getSortedNotes()
-          .where((note) => note.title
+          .where((note) => (note.title + note.body)
               .toLowerCase()
               .contains(searchQuery.value.toLowerCase()))
           .toList();

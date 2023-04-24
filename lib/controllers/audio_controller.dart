@@ -10,6 +10,7 @@ class AudioController extends GetxController {
   Rx<File?> audioFile = Rx<File?>(null);
   RxString urlAudioTmp = "".obs;
   final progress = 0.0.obs;
+  var position = 0.0.obs;
   bool isRecoderReady = false;
   RxBool isRecording = false.obs;
   RxBool isPlaying = false.obs;
@@ -82,6 +83,16 @@ class AudioController extends GetxController {
     await player.startPlayer(
       fromURI: url,
     );
+    isPlaying.value = true;
+  }
+
+  Future<void> pausePlayer() async {
+    await player.pausePlayer();
+    isPlaying.value = false;
+  }
+
+  Future<void> seekToPlayer(int millisecond) async {
+    await player.seekToPlayer(Duration(milliseconds: millisecond));
   }
 
   void stopPlayer() {

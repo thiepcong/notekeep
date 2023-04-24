@@ -25,22 +25,33 @@ class AddAudio extends StatelessWidget {
                   style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
                 )),
             SizedBox(
-              height: 32,
+              height: 24,
             ),
-            ElevatedButton(
-                onPressed: () async {
-                  if (audioController.isRecording.value) {
-                    audioController.stopRecording();
-                  } else {
-                    audioController.startRecording();
-                  }
-                },
-                child: Obx(() => Icon(
-                      (audioController.isRecording.value)
-                          ? Icons.stop
-                          : Icons.mic,
-                      size: 80,
-                    ))),
+            GestureDetector(
+              onTap: () async {
+                if (audioController.isRecording.value) {
+                  audioController.stopRecording();
+                } else {
+                  audioController.startRecording();
+                }
+              },
+              child: Ink(
+                decoration: ShapeDecoration(
+                  color: Colors.grey,
+                  shape: CircleBorder(),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Obx(() => Icon(
+                        (audioController.isRecording.value)
+                            ? Icons.stop
+                            : Icons.mic,
+                        size: 80,
+                        color: Colors.white,
+                      )),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -49,7 +60,8 @@ class AddAudio extends StatelessWidget {
           try {
             Reference ref =
                 FirebaseStorage.instance.ref().child('audio/audio.3gpp');
-            UploadTask uploadTask = ref.putFile(audioController.audioFile.value!);
+            UploadTask uploadTask =
+                ref.putFile(audioController.audioFile.value!);
             await uploadTask.whenComplete(() async {
               String audioUrl = await ref.getDownloadURL();
               audioController.urlAudioTmp.value = audioUrl;

@@ -19,7 +19,7 @@ class MyHomePage extends GetWidget<AuthController> {
     return Scaffold(
       appBar: AppBar(
         title: Obx(() => searchController.isSearching.value
-            ? _buildSearchField()
+            ? _buildSearchField(context)
             : Text("Ghi chú", style: TextStyle(fontSize: 30))),
         actions: <Widget>[
           IconButton(
@@ -134,50 +134,30 @@ class MyHomePage extends GetWidget<AuthController> {
                       return NoteList();
                     } else {
                       print("khong co gi");
-                      return Text("No notes, create some ");
+                      return Text("Không có ghi chú");
                     }
                   }),
                 ],
               )),
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            tooltip: 'thêm ghi chú',
-            heroTag: "thêm ghi chú",
-            backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () {
-              Get.to(() => AddNotePage());
-            },
-            child: Icon(
-              Icons.add,
-              color: Theme.of(context).colorScheme.onPrimary,
-              size: 30,
-            ),
-          ),
-          // SizedBox(height: 10),
-          // FloatingActionButton(
-          //   heroTag: "vẽ",
-          //   tooltip: 'vẽ',
-          //   backgroundColor: Theme.of(context).primaryColor,
-          //   onPressed: () {
-          //     Get.to(() => AddDrawPage());
-          //     // Thêm mã để chuyển sang trang vẽ
-          //   },
-          //   child: Icon(
-          //     Icons.brush,
-          //     color: Theme.of(context).colorScheme.onPrimary,
-          //     size: 30,
-          //   ),
-          // ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'thêm ghi chú',
+        heroTag: "thêm ghi chú",
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          Get.to(() => AddNotePage());
+        },
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onPrimary,
+          size: 30,
+        ),
       ),
     );
   }
 
-  Widget _buildSearchField() {
+  Widget _buildSearchField(BuildContext context) {
     return TextField(
       controller: TextEditingController(),
       //controller: searchController.searchQueryController,
@@ -185,9 +165,31 @@ class MyHomePage extends GetWidget<AuthController> {
       decoration: InputDecoration(
         hintText: 'Tìm theo tiêu đề',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.white),
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontSize: 24,
+        ),
+        filled: true,
+        fillColor: Theme.of(context).colorScheme.onBackground,
+        contentPadding: EdgeInsets.all(8.0),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          // đổi viền khi ô input được focus
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.onSecondary,
+          ),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onPrimary,
+        fontSize: 24,
+      ),
       onChanged: (query) {
         noteController.searchQuery.value = query;
       },

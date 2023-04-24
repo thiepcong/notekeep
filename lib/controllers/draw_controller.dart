@@ -9,7 +9,6 @@ class DrawingController extends GetxController {
   final _thickness = 5.0.obs;
   RxString paintUrl = "".obs;
   Rx<Uint8List?> paint = Rx<Uint8List?>(null);
-
   RxList<List<DrawingPoint>> get drawingPoints {
     return _points;
   }

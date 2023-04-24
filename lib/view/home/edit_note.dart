@@ -35,10 +35,14 @@ class ShowNote extends StatelessWidget {
     if (noteData.imageUrl != null && noteData.imageUrl != "") {
       imageUrl.value = noteData.imageUrl!;
     }
-    if (noteData.paintUrl != null && noteData.paintUrl != "") {
+    if (drawController.paintUrl.value != null &&
+        drawController.paintUrl.value != "")
+      paintUrl.value = drawController.paintUrl.value;
+    else if (noteData.paintUrl != null && noteData.paintUrl != "") {
       paintUrl.value = noteData.paintUrl!;
       drawController.paintUrl.value = noteData.paintUrl!;
     }
+
     if (noteData.audioUrl != null && noteData.audioUrl != "") {
       audioUrl.value = noteData.audioUrl!;
       print("audio file: " + noteData.audioUrl!);
@@ -108,6 +112,7 @@ class ShowNote extends StatelessWidget {
                 Get.to(() => AddAudio());
                 break;
               case 3:
+                drawController.clear();
                 Get.to(() => EditDrawPage());
                 break;
             }
@@ -128,6 +133,10 @@ class ShowNote extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Text("$formattedDate at $time"),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Stack(
                           children: [
                             Obx(() {
@@ -189,7 +198,9 @@ class ShowNote extends StatelessWidget {
                           children: [
                             Obx(() => (paintUrl.value != "")
                                 ? Image.network(
-                                    paintUrl.value,
+                                    (drawController.paintUrl.value == "")
+                                        ? paintUrl.value
+                                        : drawController.paintUrl.value,
                                     fit: BoxFit.cover,
                                     loadingBuilder:
                                         (context, child, loadingProgress) =>
@@ -237,7 +248,6 @@ class ShowNote extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text("$formattedDate at $time"),
                         SizedBox(
                           height: 10,
                         ),
@@ -293,6 +303,10 @@ class ShowNote extends StatelessWidget {
                                                     .startPlayerFromURL(
                                                         audioController
                                                             .urlAudioTmp.value);
+                                              else {
+                                                await audioController
+                                                    .pausePlayer();
+                                              }
                                             },
                                             icon: Icon((!audioController
                                                     .isPlaying.value)
