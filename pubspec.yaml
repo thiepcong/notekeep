@@ -53,6 +53,9 @@ dependencies:
   path_provider: ^2.0.14
   flutter_ffmpeg: ^0.4.2
   permission_handler: ^10.2.0
+  cached_network_image: ^3.2.3
+  firebase_messaging: ^14.4.1
+  flutter_local_notifications: ^14.0.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -79,7 +82,7 @@ flutter:
   assets:
     - assets/image/logo.jpg
     - assets/image/logo1.png
-
+  
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

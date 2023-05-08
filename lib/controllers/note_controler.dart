@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:note_project/models/note.dart';
 import 'package:note_project/services/database.dart';
 import 'package:note_project/controllers/auth_controller.dart';
-import 'dart:io';
 
 class NoteController extends GetxController {
   RxList<NoteModel> noteList = RxList<NoteModel>();

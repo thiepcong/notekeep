@@ -65,7 +65,7 @@ class AudioController extends GetxController {
 
   // Future<File?>
   Future<void> stopRecording() async {
-    if (!isRecording.value) return null;
+    if (!isRecording.value) return ;
     final path = await recorder.stopRecorder();
     audioFile.value = File(path!);
     duration.value = Duration.zero;
@@ -75,7 +75,7 @@ class AudioController extends GetxController {
 
   Future<void> startPlayerFromURL(String url) async {
     await player.openPlayer();
-    player.setSubscriptionDuration(Duration(milliseconds: 100));
+    player.setSubscriptionDuration(const Duration(milliseconds: 100));
     player.onProgress!.listen((event) {
       progress.value = event.position.inMilliseconds.toDouble() /
           event.duration.inMilliseconds.toDouble();

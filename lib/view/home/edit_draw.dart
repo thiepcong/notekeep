@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:note_project/services/database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,7 +22,7 @@ class EditDrawPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
+          title:const Text(
             "Vẽ",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
@@ -88,7 +87,7 @@ class EditDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
+                        decoration:const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.red,
                         ),
@@ -105,7 +104,7 @@ class EditDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
+                        decoration:const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.amber,
                         ),
@@ -138,7 +137,7 @@ class EditDrawPage extends StatelessWidget {
                                   Navigator.pop(
                                       context, drawController.color.value);
                                 },
-                                child: Text('OK'),
+                                child:const Text('OK'),
                               ),
                             ],
                           ),
@@ -174,7 +173,7 @@ class EditDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
+                        decoration:const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.green,
                         ),

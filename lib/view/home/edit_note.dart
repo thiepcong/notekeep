@@ -11,6 +11,7 @@ import 'package:note_project/view/home/add_audio.dart';
 import 'package:note_project/controllers/draw_controller.dart';
 import 'package:note_project/controllers/audio_controller.dart';
 import 'edit_draw.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ShowNote extends StatelessWidget {
   final NoteModel noteData;
@@ -23,7 +24,8 @@ class ShowNote extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController bodyController = TextEditingController();
   AudioController audioController = Get.put(AudioController());
-  final DrawingController drawController = Get.put(DrawingController());
+  DrawingController drawController = Get.put(DrawingController());
+  DateTimePickerController datecontroller = Get.put(DateTimePickerController());
   bool checkIn = false;
   bool isDeletepaint = false;
   bool isDeleteaudio = false;
@@ -55,13 +57,147 @@ class ShowNote extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Chỉnh sửa ghi chú",
+            "Sửa ghi chú",
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           actions: [
+            IconButton(
+                onPressed: () {
+                  DateTime selectedDate = datecontroller.selectedDate.value;
+                  TimeOfDay selectedTime = datecontroller.selectedTime.value;
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Chọn ngày giờ"),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Chọn ngày
+                              InkWell(
+                                onTap: () async {
+                                  final DateTime? picked = await showDatePicker(
+                                    context: context,
+                                    initialDate: selectedDate,
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (picked != null) {
+                                    datecontroller.updateSelectedDate(picked);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.date_range),
+                                    SizedBox(width: 10),
+                                    Obx(() => Text(
+                                          DateFormat("dd/MM/yyyy").format(
+                                              datecontroller
+                                                  .selectedDate.value),
+                                          style: TextStyle(fontSize: 16),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              // Chọn giờ
+                              InkWell(
+                                onTap: () async {
+                                  final TimeOfDay? picked =
+                                      await showTimePicker(
+                                    context: context,
+                                    initialTime: selectedTime,
+                                  );
+                                  if (picked != null) {
+                                    datecontroller.updateSelectedTime(picked);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.access_time),
+                                    SizedBox(width: 10),
+                                    Obx(() => Text(
+                                          datecontroller.selectedTime.value
+                                              .format(Get.context!),
+                                          style: TextStyle(fontSize: 16),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: Text("Hủy"),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                final FlutterLocalNotificationsPlugin
+                                    flutterLocalNotificationsPlugin =
+                                    FlutterLocalNotificationsPlugin();
+                                // Khởi tạo cài đặt cho thông báo
+                                final AndroidInitializationSettings
+                                    initializationSettingsAndroid =
+                                    AndroidInitializationSettings(
+                                        '@mipmap/ic_launcher');
+                                final InitializationSettings
+                                    initializationSettings =
+                                    InitializationSettings(
+                                        android: initializationSettingsAndroid);
+
+                                // Khởi tạo plugin
+                                await flutterLocalNotificationsPlugin
+                                    .initialize(initializationSettings);
+                                // Tạo thông báo
+                                final DateTime now = DateTime.now();
+                                final DateTime scheduledDate = DateTime(
+                                    selectedDate.year,
+                                    selectedDate.month,
+                                    selectedDate.day,
+                                    selectedTime.hour,
+                                    selectedTime.minute);
+
+                                if (scheduledDate.isAfter(now)) {
+                                  final AndroidNotificationDetails
+                                      androidPlatformChannelSpecifics =
+                                      AndroidNotificationDetails(
+                                    'note_chanel_id',
+                                    'note_chanel_name',
+                                    channelDescription:
+                                        'note_chanel_description',
+                                    importance: Importance.max,
+                                    priority: Priority.high,
+                                    showWhen: false,
+                                  );
+
+                                  final NotificationDetails
+                                      platformChannelSpecifics =
+                                      NotificationDetails(
+                                          android:
+                                              androidPlatformChannelSpecifics);
+
+                                  // Đặt thông báo
+                                  await flutterLocalNotificationsPlugin
+                                      .schedule(
+                                          0,
+                                          titleController.text,
+                                          bodyController.text,
+                                          scheduledDate,
+                                          platformChannelSpecifics);
+                                }
+                                Get.back();
+                              },
+                              child: Text("Đồng ý"),
+                            ),
+                          ],
+                        );
+                      });
+                },
+                icon: Icon(Icons.notifications)),
             IconButton(
                 onPressed: () {
                   final RenderBox box = context.findRenderObject() as RenderBox;
@@ -499,4 +635,17 @@ void showSameContentDialog(BuildContext context) {
       );
     },
   );
+}
+
+class DateTimePickerController extends GetxController {
+  var selectedDate = DateTime.now().obs;
+  var selectedTime = TimeOfDay.now().obs;
+
+  void updateSelectedDate(DateTime date) {
+    selectedDate.value = date;
+  }
+
+  void updateSelectedTime(TimeOfDay time) {
+    selectedTime.value = time;
+  }
 }

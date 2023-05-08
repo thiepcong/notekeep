@@ -5,9 +5,7 @@ import 'note_list.dart';
 import 'add_note.dart';
 import 'package:note_project/controllers/auth_controller.dart';
 import 'app_drawer.dart';
-import 'add_category.dart';
-import 'package:note_project/controllers/draw_controller.dart';
-import 'add_draw.dart';
+import 'package:flutter/foundation.dart';
 
 class MyHomePage extends GetWidget<AuthController> {
   final AuthController authController = Get.find<AuthController>();
@@ -16,145 +14,323 @@ class MyHomePage extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Obx(() => searchController.isSearching.value
-            ? _buildSearchField(context)
-            : Text("Ghi chú", style: TextStyle(fontSize: 30))),
-        actions: <Widget>[
-          IconButton(
-            icon: Obx(() => Icon(searchController.isSearching.value
-                ? Icons.close
-                : Icons.search)),
-            onPressed: () {
-              searchController.isSearching.toggle();
-              if (!searchController.isSearching.value)
-                noteController.searchQuery.value = "";
-            },
+    // final platform = TargetPlatform.
+    if (defaultTargetPlatform == TargetPlatform.android)
+      return Scaffold(
+        appBar: AppBar(
+          title: Obx(() => searchController.isSearching.value
+              ? _buildSearchField(context)
+              : const Text("Ghi chú", style: TextStyle(fontSize: 30))),
+          actions: <Widget>[
+            IconButton(
+              icon: Obx(() => Icon(searchController.isSearching.value
+                  ? Icons.close
+                  : Icons.search)),
+              onPressed: () {
+                searchController.isSearching.toggle();
+                if (!searchController.isSearching.value)
+                  noteController.searchQuery.value = "";
+              },
+            ),
+          ],
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
+        drawer: AppDrawer(),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 16,
+            ),
+            child: Obx(() => Column(
+                  children: [
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              noteController.sortCheck.value = true;
+                              noteController.sortByTitle.toggle();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(
+                                bottom: 5,
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text('Tên',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary)),
+
+                                  Icon(
+                                      noteController.sortByTitle.value
+                                          ? Icons.arrow_upward
+                                          : Icons.arrow_downward,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary), // Icon
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              noteController.sortCheck.value = false;
+                              noteController.sortByDate.toggle();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                bottom: 5,
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text('Ngày',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary)),
+
+                                  Icon(
+                                      noteController.sortByDate.value
+                                          ? Icons.arrow_upward
+                                          : Icons.arrow_downward,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary), // Icon
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GetX<NoteController>(
+                        builder: (NoteController noteController) {
+                      if (noteController != null &&
+                          noteController.notes != null) {
+                        return NoteList();
+                      } else {
+                        print("khong co gi");
+                        return Text("Không có ghi chú");
+                      }
+                    }),
+                  ],
+                )),
           ),
-        ],
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      drawer: AppDrawer(),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 16,
+        ),
+        floatingActionButton: FloatingActionButton(
+          tooltip: 'thêm ghi chú',
+          heroTag: "thêm ghi chú",
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: () {
+            Get.to(() => AddNotePage());
+          },
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.onPrimary,
+            size: 30,
           ),
-          child: Obx(() => Column(
+        ),
+      );
+    else
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Ghi chú", style: TextStyle(fontSize: 30)),
+          actions: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width / 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            noteController.sortCheck.value = true;
-                            noteController.sortByTitle.toggle();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.only(
-                              bottom: 5,
-                              left: 10,
-                              right: 10,
-                              top: 5,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: TextField(
+                        controller: TextEditingController(),
+                        //controller: searchController.searchQueryController,
+                        decoration: InputDecoration(
+                          hintText: 'Tìm kiếm',
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 24,
+                          ),
+                          filled: true,
+                          fillColor: Theme.of(context).indicatorColor,
+                          contentPadding: EdgeInsets.all(8.0),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
                             ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            // đổi viền khi ô input được focus
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.onSecondary,
                             ),
-                            child: Row(
-                              children: [
-                                Text('Tên',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary)),
-
-                                Icon(
-                                    noteController.sortByTitle.value
-                                        ? Icons.arrow_upward
-                                        : Icons.arrow_downward,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary), // Icon
-                              ],
-                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        SizedBox(
-                          width: 20,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 24,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            noteController.sortCheck.value = false;
-                            noteController.sortByDate.toggle();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.only(
-                              bottom: 5,
-                              left: 10,
-                              right: 10,
-                              top: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            child: Row(
-                              children: [
-                                Text('Ngày',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary)),
-
-                                Icon(
-                                    noteController.sortByDate.value
-                                        ? Icons.arrow_upward
-                                        : Icons.arrow_downward,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary), // Icon
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                        onChanged: (query) {
+                          noteController.searchQuery.value = query;
+                        },
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  GetX<NoteController>(
-                      builder: (NoteController noteController) {
-                    if (noteController != null &&
-                        noteController.notes != null) {
-                      return NoteList();
-                    } else {
-                      print("khong co gi");
-                      return Text("Không có ghi chú");
-                    }
-                  }),
                 ],
-              )),
+              ),
+            ),
+          ],
+          backgroundColor: Theme.of(context).primaryColor,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'thêm ghi chú',
-        heroTag: "thêm ghi chú",
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          Get.to(() => AddNotePage());
-        },
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).colorScheme.onPrimary,
-          size: 30,
+        drawer: AppDrawer(),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 16,
+            ),
+            child: Obx(() => Column(
+                  children: [
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              noteController.sortCheck.value = true;
+                              noteController.sortByTitle.toggle();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(
+                                bottom: 5,
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text('Tên',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary)),
+
+                                  Icon(
+                                      noteController.sortByTitle.value
+                                          ? Icons.arrow_upward
+                                          : Icons.arrow_downward,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary), // Icon
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              noteController.sortCheck.value = false;
+                              noteController.sortByDate.toggle();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                bottom: 5,
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text('Ngày',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary)),
+
+                                  Icon(
+                                      noteController.sortByDate.value
+                                          ? Icons.arrow_upward
+                                          : Icons.arrow_downward,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary), // Icon
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GetX<NoteController>(
+                        builder: (NoteController noteController) {
+                      if (noteController != null &&
+                          noteController.notes != null) {
+                        return NoteList();
+                      } else {
+                        print("khong co gi");
+                        return Text("Không có ghi chú");
+                      }
+                    }),
+                  ],
+                )),
+          ),
         ),
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          tooltip: 'thêm ghi chú',
+          heroTag: "thêm ghi chú",
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: () {
+            Get.to(() => AddNotePage());
+          },
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.onPrimary,
+            size: 30,
+          ),
+        ),
+      );
   }
 
   Widget _buildSearchField(BuildContext context) {
@@ -187,7 +363,7 @@ class MyHomePage extends GetWidget<AuthController> {
         ),
       ),
       style: TextStyle(
-        color: Theme.of(context).colorScheme.onPrimary,
+        // color: Theme.of(context).colorScheme.onPrimary,
         fontSize: 24,
       ),
       onChanged: (query) {

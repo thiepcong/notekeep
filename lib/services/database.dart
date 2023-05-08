@@ -42,7 +42,6 @@ class Database {
       File? audio, Uint8List? bytes) async {
     try {
       var uuid = Uuid().v4();
-      // Tạo một Map chứa thông tin ghi chú
       var noteData = {
         "id": uuid,
         "title": title,
