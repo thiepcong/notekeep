@@ -17,6 +17,7 @@ class MyHomePage extends GetWidget<AuthController> {
     // final platform = TargetPlatform.
     if (defaultTargetPlatform == TargetPlatform.android) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Obx(() => searchController.isSearching.value
               ? _buildSearchField(context)

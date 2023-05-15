@@ -291,8 +291,9 @@ class ShowNote extends StatelessWidget {
                                                       CircularProgressIndicator(),
                                                 ),
                                 );
-                              else
-                                return SizedBox();
+                              else {
+                                return const SizedBox();
+                              }
                             }),
                             Positioned(
                               top: 0,
@@ -303,7 +304,7 @@ class ShowNote extends StatelessWidget {
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
-                                          title: Text("Xóa?"),
+                                          title: const Text("Xóa?"),
                                           content: const Text(
                                               "Bạn có chắc chắn muốn xóa?"),
                                           actions: <Widget>[
@@ -332,7 +333,8 @@ class ShowNote extends StatelessWidget {
                         ),
                         Stack(
                           children: [
-                            Obx(() => (paintUrl.value != "")
+                            Obx(() => (drawController.paintUrl.value != "" &&
+                                    drawController.paintUrl.value != null)
                                 ? Image.network(
                                     (drawController.paintUrl.value == "")
                                         ? paintUrl.value
@@ -371,6 +373,8 @@ class ShowNote extends StatelessWidget {
                                               onPressed: () {
                                                 isDeletepaint = true;
                                                 paintUrl.value = "";
+                                                drawController.paintUrl.value =
+                                                    "";
                                                 Navigator.of(context).pop(true);
                                               },
                                               child: const Text("Có"),
@@ -416,7 +420,7 @@ class ShowNote extends StatelessWidget {
                         const SizedBox(
                           height: 32,
                         ),
-                        Obx(() => (audioUrl.value != "")
+                        Obx(() => (audioController.urlAudioTmp.value != "")
                             ? Container(
                                 color: Colors.green,
                                 child: Column(
@@ -468,18 +472,23 @@ class ShowNote extends StatelessWidget {
                                                               Navigator.of(
                                                                       context)
                                                                   .pop(false),
-                                                          child: const Text("Không"),
+                                                          child: const Text(
+                                                              "Không"),
                                                         ),
                                                         TextButton(
                                                           onPressed: () {
                                                             isDeleteaudio =
                                                                 true;
                                                             audioUrl.value = "";
+                                                            audioController
+                                                                .urlAudioTmp
+                                                                .value = "";
                                                             Navigator.of(
                                                                     context)
                                                                 .pop(true);
                                                           },
-                                                          child: const Text("Có"),
+                                                          child:
+                                                              const Text("Có"),
                                                         ),
                                                       ],
                                                     );

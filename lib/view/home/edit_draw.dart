@@ -22,7 +22,7 @@ class EditDrawPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title:const Text(
+          title: const Text(
             "Vẽ",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
@@ -32,7 +32,9 @@ class EditDrawPage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(drawController.paintUrl.value),
+              image: NetworkImage(drawController.paintUrl.value == ""
+                  ? "https://firebasestorage.googleapis.com/v0/b/noteapp-9c63e.appspot.com/o/paint%2Fpaint1.png?alt=media&token=9b548c72-5be7-4bcf-a669-ad82e775a254"
+                  : drawController.paintUrl.value),
               fit: BoxFit.cover,
             ),
           ),
@@ -87,7 +89,7 @@ class EditDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration:const BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.red,
                         ),
@@ -104,7 +106,7 @@ class EditDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration:const BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.amber,
                         ),
@@ -137,7 +139,7 @@ class EditDrawPage extends StatelessWidget {
                                   Navigator.pop(
                                       context, drawController.color.value);
                                 },
-                                child:const Text('OK'),
+                                child: const Text('OK'),
                               ),
                             ],
                           ),
@@ -173,7 +175,7 @@ class EditDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration:const BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.green,
                         ),
