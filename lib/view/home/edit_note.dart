@@ -189,6 +189,13 @@ class ShowNote extends StatelessWidget {
                                           scheduledDate,
                                           platformChannelSpecifics);
                                 }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Thông báo sẽ hiển thị lúc \n ${scheduledDate}'),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
                                 Get.back();
                               },
                               child: const Text("Đồng ý"),
