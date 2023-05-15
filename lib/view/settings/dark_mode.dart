@@ -7,7 +7,7 @@ class DarkMode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Chủ đề sáng-tối",
           style: TextStyle(
             fontSize: 24,
@@ -18,17 +18,17 @@ class DarkMode extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 10,
             horizontal: 16,
           ),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                 ),
                 onTap: () {
@@ -39,8 +39,8 @@ class DarkMode extends StatelessWidget {
                   Icons.settings_brightness_outlined,
                   color: Theme.of(context).iconTheme.color,
                 ),
-                title: Text("Sử dụng cài đặt của hệ thống"),
-                subtitle: Text(
+                title: const Text("Sử dụng cài đặt của hệ thống"),
+                subtitle: const Text(
                   "Tự động chuyển sang chủ đề mặc định với hệ thống",
                 ),
                 trailing: Icon(
@@ -48,9 +48,9 @@ class DarkMode extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                 ),
               ),
-              Divider(),
+              const Divider(),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                 ),
                 onTap: () {
@@ -61,15 +61,15 @@ class DarkMode extends StatelessWidget {
                   Icons.brightness_5,
                   color: Theme.of(context).iconTheme.color,
                 ),
-                title: Text("Chủ đề sáng"),
+                title: const Text("Chủ đề sáng"),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
                   color: Theme.of(context).iconTheme.color,
                 ),
               ),
-              Divider(),
+              const Divider(),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                 ),
                 onTap: () {
@@ -80,7 +80,7 @@ class DarkMode extends StatelessWidget {
                   Icons.brightness_4_outlined,
                   color: Theme.of(context).iconTheme.color,
                 ),
-                title: Text("Chủ đề tối"),
+                title: const Text("Chủ đề tối"),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
                   color: Theme.of(context).iconTheme.color,

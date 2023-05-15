@@ -27,7 +27,7 @@ class NoteList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (defaultTargetPlatform == TargetPlatform.android)
+    if (defaultTargetPlatform == TargetPlatform.android) {
       return Expanded(
         child: StaggeredGridView.countBuilder(
           itemCount: noteController.notes.length,
@@ -47,7 +47,7 @@ class NoteList extends StatelessWidget {
                     index: index, noteData: noteController.notes[index]));
               },
               child: Container(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   bottom: 10,
                   left: 10,
                   right: 10,
@@ -66,7 +66,7 @@ class NoteList extends StatelessWidget {
                       final imageUrl = noteController.notes[index].imageUrl;
                       return imageUrl != null && imageUrl.isNotEmpty
                           ? CachedNetworkImage(imageUrl: imageUrl)
-                          : SizedBox();
+                          : const SizedBox();
                     }),
                     Obx(() => (noteController.notes[index].paintUrl != null &&
                             noteController.notes[index].paintUrl != "")
@@ -80,7 +80,7 @@ class NoteList extends StatelessWidget {
                                         child: CircularProgressIndicator(),
                                       ),
                           )
-                        : SizedBox()),
+                        : const SizedBox()),
                     ListTile(
                       contentPadding: const EdgeInsets.only(
                         top: 5,
@@ -131,7 +131,7 @@ class NoteList extends StatelessWidget {
           },
         ),
       );
-    else
+    } else {
       return Expanded(
         child: StaggeredGridView.countBuilder(
           itemCount: noteController.notes.length,
@@ -151,7 +151,7 @@ class NoteList extends StatelessWidget {
                     index: index, noteData: noteController.notes[index]));
               },
               child: Container(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   bottom: 10,
                   left: 10,
                   right: 10,
@@ -178,7 +178,7 @@ class NoteList extends StatelessWidget {
                                         child: CircularProgressIndicator(),
                                       ),
                           )
-                        : SizedBox()),
+                        : const SizedBox()),
                     Obx(() => (noteController.notes[index].paintUrl != null &&
                             noteController.notes[index].paintUrl != "")
                         ? Image.network(
@@ -191,7 +191,7 @@ class NoteList extends StatelessWidget {
                                         child: CircularProgressIndicator(),
                                       ),
                           )
-                        : SizedBox()),
+                        : const SizedBox()),
                     ListTile(
                       contentPadding: const EdgeInsets.only(
                         top: 5,
@@ -242,6 +242,7 @@ class NoteList extends StatelessWidget {
           },
         ),
       );
+    }
   }
 }
 

@@ -25,7 +25,7 @@ class AddNotePage extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Thêm ghi chú",
           style: TextStyle(
             fontSize: 24,
@@ -74,11 +74,11 @@ class AddNotePage extends StatelessWidget {
       body: SafeArea(
         child: Container(
           height: size.height,
-          padding: EdgeInsets.all(
+          padding: const EdgeInsets.all(
             16.0,
           ),
           child: Column(children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Expanded(
@@ -89,7 +89,7 @@ class AddNotePage extends StatelessWidget {
                       children: [
                         Obx(() => (image.value != null)
                             ? Image.file(image.value!)
-                            : SizedBox()),
+                            : const SizedBox()),
                         Positioned(
                           top: 0,
                           right: 0,
@@ -99,27 +99,27 @@ class AddNotePage extends StatelessWidget {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text("Xóa?"),
+                                      title: const Text("Xóa?"),
                                       content:
-                                          Text("Bạn có chắc chắn muốn xóa?"),
+                                          const Text("Bạn có chắc chắn muốn xóa?"),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.of(context).pop(false),
-                                          child: Text("Không"),
+                                          child: const Text("Không"),
                                         ),
                                         TextButton(
                                           onPressed: () {
                                             image.value = null;
                                             Navigator.of(context).pop(true);
                                           },
-                                          child: Text("Có"),
+                                          child: const Text("Có"),
                                         ),
                                       ],
                                     );
                                   });
                             },
-                            child: Icon(Icons.clear),
+                            child: const Icon(Icons.clear),
                           ),
                         ),
                       ],
@@ -135,11 +135,11 @@ class AddNotePage extends StatelessWidget {
                                         loadingProgress) =>
                                     loadingProgress == null
                                         ? child
-                                        : Center(
+                                        : const Center(
                                             child: CircularProgressIndicator(),
                                           ),
                               )
-                            : SizedBox()),
+                            : const SizedBox()),
                         Positioned(
                           top: 0,
                           right: 0,
@@ -149,14 +149,14 @@ class AddNotePage extends StatelessWidget {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text("Xóa?"),
+                                      title: const Text("Xóa?"),
                                       content:
-                                          Text("Bạn có chắc chắn muốn xóa?"),
+                                          const Text("Bạn có chắc chắn muốn xóa?"),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.of(context).pop(false),
-                                          child: Text("Không"),
+                                          child: const Text("Không"),
                                         ),
                                         TextButton(
                                           onPressed: () {
@@ -164,33 +164,33 @@ class AddNotePage extends StatelessWidget {
                                             drawController.clear();
                                             Navigator.of(context).pop(true);
                                           },
-                                          child: Text("Có"),
+                                          child: const Text("Có"),
                                         ),
                                       ],
                                     );
                                   });
                             },
-                            child: Icon(Icons.clear),
+                            child: const Icon(Icons.clear),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
                       maxLines: null,
                       autofocus: true,
                       controller: titleController,
                       keyboardType: TextInputType.multiline,
                       textCapitalization: TextCapitalization.sentences,
-                      decoration: InputDecoration.collapsed(
+                      decoration: const InputDecoration.collapsed(
                         hintText: "Tiêu đề ghi chú",
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 26.0,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     TextFormField(
@@ -198,14 +198,14 @@ class AddNotePage extends StatelessWidget {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       textCapitalization: TextCapitalization.sentences,
-                      decoration: InputDecoration.collapsed(
+                      decoration: const InputDecoration.collapsed(
                         hintText: "Nhập nội dung nào đó ... ",
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20.0,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     Obx(() => (audioController.urlAudioTmp.value != "")
@@ -213,7 +213,7 @@ class AddNotePage extends StatelessWidget {
                             color: Colors.green,
                             child: Column(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 LinearProgressIndicator(
@@ -224,12 +224,12 @@ class AddNotePage extends StatelessWidget {
                                   children: [
                                     IconButton(
                                         onPressed: () async {
-                                          if (!audioController.isPlaying.value)
+                                          if (!audioController.isPlaying.value) {
                                             await audioController
                                                 .startPlayerFromURL(
                                                     audioController
                                                         .urlAudioTmp.value);
-                                          else {
+                                          } else {
                                             await audioController.pausePlayer();
                                             await audioController
                                                 .seekToPlayer(500);
@@ -243,15 +243,15 @@ class AddNotePage extends StatelessWidget {
                                         onPressed: () {
                                           audioController.stopPlayer();
                                         },
-                                        icon: Icon(Icons.stop)),
+                                        icon: const Icon(Icons.stop)),
                                     IconButton(
                                         onPressed: () async {
                                           await showDialog(
                                               context: context,
                                               builder: (context) {
                                                 return AlertDialog(
-                                                  title: Text("Xóa?"),
-                                                  content: Text(
+                                                  title: const Text("Xóa?"),
+                                                  content: const Text(
                                                       "Bạn có chắc chắn muốn xóa?"),
                                                   actions: <Widget>[
                                                     TextButton(
@@ -271,19 +271,19 @@ class AddNotePage extends StatelessWidget {
                                                         Navigator.of(context)
                                                             .pop(true);
                                                       },
-                                                      child: Text("Có"),
+                                                      child: const Text("Có"),
                                                     ),
                                                   ],
                                                 );
                                               });
                                         },
-                                        icon: Icon(Icons.close)),
+                                        icon: const Icon(Icons.close)),
                                   ],
                                 ),
                               ],
                             ),
                           )
-                        : SizedBox())
+                        : const SizedBox())
                   ],
                 ),
               ),
@@ -297,7 +297,7 @@ class AddNotePage extends StatelessWidget {
           saveNote(context);
         },
         tooltip: "Lưu",
-        child: Icon(
+        child: const Icon(
           Icons.save,
           size: 30,
         ),
@@ -347,7 +347,7 @@ void showEmptyTitleDialog(BuildContext context) {
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: Theme.of(context).backgroundColor,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(10.0),
           ),

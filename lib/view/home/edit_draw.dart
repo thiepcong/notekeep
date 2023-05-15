@@ -70,7 +70,7 @@ class EditDrawPage extends StatelessWidget {
       ),
       bottomNavigationBar: Obx(() => Container(
             height: 160,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -119,7 +119,7 @@ class EditDrawPage extends StatelessWidget {
                         final color = await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text('Chọn một màu'),
+                            title: const Text('Chọn một màu'),
                             content: SingleChildScrollView(
                               child: ColorPicker(
                                 pickerColor: drawController.color,
@@ -227,6 +227,7 @@ class DrawPainter extends CustomPainter {
       ..strokeWidth = thickness
       ..strokeCap = StrokeCap.round;
     for (List<DrawingPoint> pointList in points)
+      // ignore: curly_braces_in_flow_control_structures
       for (int i = 0; i < pointList.length - 1; i++) {
         if (pointList[i] != null && pointList[i + 1] != null) {
           canvas.drawLine(pointList[i].point, pointList[i + 1].point, paint);

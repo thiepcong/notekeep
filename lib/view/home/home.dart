@@ -15,7 +15,7 @@ class MyHomePage extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     // final platform = TargetPlatform.
-    if (defaultTargetPlatform == TargetPlatform.android)
+    if (defaultTargetPlatform == TargetPlatform.android) {
       return Scaffold(
         appBar: AppBar(
           title: Obx(() => searchController.isSearching.value
@@ -28,14 +28,15 @@ class MyHomePage extends GetWidget<AuthController> {
                   : Icons.search)),
               onPressed: () {
                 searchController.isSearching.toggle();
-                if (!searchController.isSearching.value)
+                if (!searchController.isSearching.value) {
                   noteController.searchQuery.value = "";
+                }
               },
             ),
           ],
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        drawer: AppDrawer(),
+        drawer: const AppDrawer(),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -83,7 +84,7 @@ class MyHomePage extends GetWidget<AuthController> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           GestureDetector(
@@ -92,7 +93,7 @@ class MyHomePage extends GetWidget<AuthController> {
                               noteController.sortByDate.toggle();
                             },
                             child: Container(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 bottom: 5,
                                 left: 10,
                                 right: 10,
@@ -134,7 +135,7 @@ class MyHomePage extends GetWidget<AuthController> {
                         return NoteList();
                       } else {
                         print("khong co gi");
-                        return Text("Không có ghi chú");
+                        return const Text("Không có ghi chú");
                       }
                     }),
                   ],
@@ -155,7 +156,7 @@ class MyHomePage extends GetWidget<AuthController> {
           ),
         ),
       );
-    else
+    } else {
       return Scaffold(
         appBar: AppBar(
           title: const Text("Ghi chú", style: TextStyle(fontSize: 30)),
@@ -180,7 +181,7 @@ class MyHomePage extends GetWidget<AuthController> {
                           ),
                           filled: true,
                           fillColor: Theme.of(context).indicatorColor,
-                          contentPadding: EdgeInsets.all(8.0),
+                          contentPadding: const EdgeInsets.all(8.0),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Theme.of(context).colorScheme.primary,
@@ -211,7 +212,7 @@ class MyHomePage extends GetWidget<AuthController> {
           ],
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        drawer: AppDrawer(),
+        drawer: const AppDrawer(),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -259,7 +260,7 @@ class MyHomePage extends GetWidget<AuthController> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           GestureDetector(
@@ -268,7 +269,7 @@ class MyHomePage extends GetWidget<AuthController> {
                               noteController.sortByDate.toggle();
                             },
                             child: Container(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 bottom: 5,
                                 left: 10,
                                 right: 10,
@@ -331,6 +332,7 @@ class MyHomePage extends GetWidget<AuthController> {
           ),
         ),
       );
+    }
   }
 
   Widget _buildSearchField(BuildContext context) {
@@ -347,7 +349,7 @@ class MyHomePage extends GetWidget<AuthController> {
         ),
         filled: true,
         fillColor: Theme.of(context).colorScheme.onBackground,
-        contentPadding: EdgeInsets.all(8.0),
+        contentPadding: const EdgeInsets.all(8.0),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Theme.of(context).colorScheme.onPrimary,
@@ -362,7 +364,7 @@ class MyHomePage extends GetWidget<AuthController> {
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
-      style: TextStyle(
+      style: const TextStyle(
         // color: Theme.of(context).colorScheme.onPrimary,
         fontSize: 24,
       ),

@@ -27,7 +27,7 @@ class AppDrawer extends StatelessWidget {
               Get.to(() => MyHomePage());
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             iconColor: Theme.of(context).primaryColor,
             leading: const Icon(Icons.note_add),
@@ -36,7 +36,7 @@ class AppDrawer extends StatelessWidget {
               Get.to(() => AddNotePage());
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             iconColor: Theme.of(context).primaryColor,
             leading: const Icon(Icons.settings),

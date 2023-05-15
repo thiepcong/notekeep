@@ -10,7 +10,7 @@ class Account extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Account",
           style: TextStyle(
             fontSize: 24,
@@ -21,21 +21,21 @@ class Account extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding:const  EdgeInsets.symmetric(
             vertical: 10,
             horizontal: 16,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Obx(() {
                 String name = userController.user.name;
                 if (name.isNotEmpty) {
                   return ListTile(
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: 15,
                     ),
                     onTap: () {},
@@ -47,18 +47,18 @@ class Account extends StatelessWidget {
                   );
                 } else {
                   // hiển thị khối lệnh này nếu dữ liệu chưa được load thành công
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
               }),
-              Divider(),
+              const Divider(),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding:const  EdgeInsets.symmetric(
                   horizontal: 15,
                 ),
                 onTap: () {
                   showSignOutDialog(context);
                 },
-                title: Text("Đăng xuất"),
+                title: const Text("Đăng xuất"),
                 leading: Icon(
                   Icons.power_settings_new_outlined,
                   color: Theme.of(context).iconTheme.color,
@@ -79,10 +79,10 @@ void showSignOutDialog(BuildContext context) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        contentPadding: EdgeInsets.all(20),
-        actionsPadding: EdgeInsets.only(right: 60),
+        contentPadding: const EdgeInsets.all(20),
+        actionsPadding: const EdgeInsets.only(right: 60),
         backgroundColor: Theme.of(context).backgroundColor,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(20.0),
           ),

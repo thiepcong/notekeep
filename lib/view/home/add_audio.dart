@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:note_project/controllers/audio_controller.dart';
-import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AddAudio extends StatelessWidget {
@@ -13,7 +10,7 @@ class AddAudio extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ghi âm"),
+        title: const Text("Ghi âm"),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Center(
@@ -22,9 +19,9 @@ class AddAudio extends StatelessWidget {
           children: [
             Obx(() => Text(
                   '${audioController.duration.value.inSeconds} s',
-                  style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
                 )),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             GestureDetector(
@@ -36,12 +33,12 @@ class AddAudio extends StatelessWidget {
                 }
               },
               child: Ink(
-                decoration: ShapeDecoration(
+                decoration:const  ShapeDecoration(
                   color: Colors.grey,
                   shape: CircleBorder(),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding:const  EdgeInsets.all(16),
                   child: Obx(() => Icon(
                         (audioController.isRecording.value)
                             ? Icons.stop
@@ -73,7 +70,7 @@ class AddAudio extends StatelessWidget {
             print('Error uploading audio: $e');
           }
         },
-        child: Icon(Icons.save),
+        child: const Icon(Icons.save),
       ),
     );
   }

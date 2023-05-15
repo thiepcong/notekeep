@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http;
 
 class AudioController extends GetxController {
   Rx<File?> audioFile = Rx<File?>(null);
@@ -65,7 +62,7 @@ class AudioController extends GetxController {
 
   // Future<File?>
   Future<void> stopRecording() async {
-    if (!isRecording.value) return ;
+    if (!isRecording.value) return;
     final path = await recorder.stopRecorder();
     audioFile.value = File(path!);
     duration.value = Duration.zero;

@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:note_project/models/note.dart';
 import 'package:note_project/models/user.dart';
 import 'package:uuid/uuid.dart';
-import 'package:get/get.dart';
-import 'package:note_project/controllers/auth_controller.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -41,7 +39,7 @@ class Database {
   Future<void> addNote(String uid, String title, String body, File? image,
       File? audio, Uint8List? bytes) async {
     try {
-      var uuid = Uuid().v4();
+      var uuid = const Uuid().v4();
       var noteData = {
         "id": uuid,
         "title": title,
@@ -148,9 +146,9 @@ class Database {
         .snapshots()
         .map((QuerySnapshot query) {
       List<NoteModel> retVal = [];
-      query.docs.forEach((element) {
+      for (var element in query.docs) {
         retVal.add(NoteModel.fromDocumentSnapshot(element));
-      });
+      }
       return retVal;
     });
   }

@@ -1,7 +1,4 @@
-import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
-import 'package:note_project/services/database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,7 +20,7 @@ class AddDrawPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
+          title: const Text(
             "Vẽ",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
@@ -65,7 +62,7 @@ class AddDrawPage extends StatelessWidget {
       ),
       bottomNavigationBar: Obx(() => Container(
             height: 160,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -82,7 +79,7 @@ class AddDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.red,
                         ),
@@ -99,7 +96,7 @@ class AddDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.amber,
                         ),
@@ -114,7 +111,7 @@ class AddDrawPage extends StatelessWidget {
                         final color = await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text('Chọn một màu'),
+                            title: const Text('Chọn một màu'),
                             content: SingleChildScrollView(
                               child: ColorPicker(
                                 pickerColor: drawController.color,
@@ -132,7 +129,7 @@ class AddDrawPage extends StatelessWidget {
                                   Navigator.pop(
                                       context, drawController.color.value);
                                 },
-                                child: Text('OK'),
+                                child: const Text('OK'),
                               ),
                             ],
                           ),
@@ -165,7 +162,7 @@ class AddDrawPage extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.green,
                         ),
@@ -219,6 +216,7 @@ class DrawPainter extends CustomPainter {
       ..strokeWidth = thickness
       ..strokeCap = StrokeCap.round;
     for (List<DrawingPoint> pointList in points)
+      // ignore: curly_braces_in_flow_control_structures
       for (int i = 0; i < pointList.length - 1; i++) {
         if (pointList[i] != null && pointList[i + 1] != null) {
           canvas.drawLine(pointList[i].point, pointList[i + 1].point, paint);

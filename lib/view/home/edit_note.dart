@@ -13,6 +13,7 @@ import 'package:note_project/controllers/audio_controller.dart';
 import 'edit_draw.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+// ignore: must_be_immutable
 class ShowNote extends StatelessWidget {
   final NoteModel noteData;
   final int index;
@@ -38,16 +39,15 @@ class ShowNote extends StatelessWidget {
       imageUrl.value = noteData.imageUrl!;
     }
     if (drawController.paintUrl.value != null &&
-        drawController.paintUrl.value != "")
+        drawController.paintUrl.value != "") {
       paintUrl.value = drawController.paintUrl.value;
-    else if (noteData.paintUrl != null && noteData.paintUrl != "") {
+    } else if (noteData.paintUrl != null && noteData.paintUrl != "") {
       paintUrl.value = noteData.paintUrl!;
       drawController.paintUrl.value = noteData.paintUrl!;
     }
 
     if (noteData.audioUrl != null && noteData.audioUrl != "") {
       audioUrl.value = noteData.audioUrl!;
-      print("audio file: " + noteData.audioUrl!);
       audioController.urlAudioTmp.value = noteData.audioUrl!;
     }
 
@@ -56,7 +56,7 @@ class ShowNote extends StatelessWidget {
     var time = DateFormat.jm().format(noteData.creationDate.toDate());
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "Sửa ghi chú",
             style: TextStyle(
               fontSize: 24,
@@ -97,12 +97,12 @@ class ShowNote extends StatelessWidget {
                                           DateFormat("dd/MM/yyyy").format(
                                               datecontroller
                                                   .selectedDate.value),
-                                          style: TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16),
                                         )),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               // Chọn giờ
                               InkWell(
                                 onTap: () async {
@@ -117,12 +117,12 @@ class ShowNote extends StatelessWidget {
                                 },
                                 child: Row(
                                   children: [
-                                    Icon(Icons.access_time),
-                                    SizedBox(width: 10),
+                                    const Icon(Icons.access_time),
+                                    const SizedBox(width: 10),
                                     Obx(() => Text(
                                           datecontroller.selectedTime.value
                                               .format(Get.context!),
-                                          style: TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16),
                                         )),
                                   ],
                                 ),
@@ -132,7 +132,7 @@ class ShowNote extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () => Get.back(),
-                              child: Text("Hủy"),
+                              child: const Text("Hủy"),
                             ),
                             TextButton(
                               onPressed: () async {
@@ -191,13 +191,13 @@ class ShowNote extends StatelessWidget {
                                 }
                                 Get.back();
                               },
-                              child: Text("Đồng ý"),
+                              child: const Text("Đồng ý"),
                             ),
                           ],
                         );
                       });
                 },
-                icon: Icon(Icons.notifications)),
+                icon: const Icon(Icons.notifications)),
             IconButton(
                 onPressed: () {
                   final RenderBox box = context.findRenderObject() as RenderBox;
@@ -206,12 +206,12 @@ class ShowNote extends StatelessWidget {
                       sharePositionOrigin:
                           box.localToGlobal(Offset.zero) & box.size);
                 },
-                icon: Icon(Icons.share)),
+                icon: const Icon(Icons.share)),
             IconButton(
               onPressed: () {
                 showDeleteDialog(context, noteData);
               },
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
             ),
           ],
           backgroundColor: Theme.of(context).primaryColor,
@@ -219,19 +219,19 @@ class ShowNote extends StatelessWidget {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: [
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.camera_alt),
               label: 'Chụp hình ảnh',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.image),
               label: 'Thêm hình ảnh',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.music_note),
               label: 'Thêm âm thanh',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.brush),
               label: 'Vẽ',
             ),
@@ -256,13 +256,13 @@ class ShowNote extends StatelessWidget {
         ),
         body: SafeArea(
           child: Container(
-            padding: EdgeInsets.all(
+            padding: const EdgeInsets.all(
               16.0,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Expanded(
@@ -270,7 +270,7 @@ class ShowNote extends StatelessWidget {
                     child: Column(
                       children: [
                         Text("$formattedDate at $time"),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Stack(
@@ -304,14 +304,14 @@ class ShowNote extends StatelessWidget {
                                       builder: (context) {
                                         return AlertDialog(
                                           title: Text("Xóa?"),
-                                          content: Text(
+                                          content: const Text(
                                               "Bạn có chắc chắn muốn xóa?"),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context)
                                                       .pop(false),
-                                              child: Text("Không"),
+                                              child: const Text("Không"),
                                             ),
                                             TextButton(
                                               onPressed: () {
@@ -319,13 +319,13 @@ class ShowNote extends StatelessWidget {
                                                 checkIn = false;
                                                 Navigator.of(context).pop(true);
                                               },
-                                              child: Text("Có"),
+                                              child: const Text("Có"),
                                             ),
                                           ],
                                         );
                                       });
                                 },
-                                child: Icon(Icons.clear),
+                                child: const Icon(Icons.clear),
                               ),
                             ),
                           ],
@@ -342,12 +342,12 @@ class ShowNote extends StatelessWidget {
                                         (context, child, loadingProgress) =>
                                             loadingProgress == null
                                                 ? child
-                                                : Center(
+                                                : const Center(
                                                     child:
                                                         CircularProgressIndicator(),
                                                   ),
                                   )
-                                : SizedBox()),
+                                : const SizedBox()),
                             Positioned(
                               top: 0,
                               right: 0,
@@ -357,15 +357,15 @@ class ShowNote extends StatelessWidget {
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
-                                          title: Text("Xóa?"),
-                                          content: Text(
+                                          title: const Text("Xóa?"),
+                                          content: const Text(
                                               "Bạn có chắc chắn muốn xóa?"),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context)
                                                       .pop(false),
-                                              child: Text("Không"),
+                                              child: const Text("Không"),
                                             ),
                                             TextButton(
                                               onPressed: () {
@@ -373,32 +373,32 @@ class ShowNote extends StatelessWidget {
                                                 paintUrl.value = "";
                                                 Navigator.of(context).pop(true);
                                               },
-                                              child: Text("Có"),
+                                              child: const Text("Có"),
                                             ),
                                           ],
                                         );
                                       });
                                 },
-                                child: Icon(Icons.clear),
+                                child: const Icon(Icons.clear),
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         TextFormField(
                           controller: titleController,
                           maxLines: null,
-                          decoration: InputDecoration.collapsed(
+                          decoration: const InputDecoration.collapsed(
                             hintText: "Tiêu đề ghi chú",
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 26.0,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         TextFormField(
@@ -406,14 +406,14 @@ class ShowNote extends StatelessWidget {
                           controller: bodyController,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
-                          decoration: InputDecoration.collapsed(
+                          decoration: const InputDecoration.collapsed(
                             hintText: "Nhập nội dung nào đó ...",
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20.0,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 32,
                         ),
                         Obx(() => (audioUrl.value != "")
@@ -421,7 +421,7 @@ class ShowNote extends StatelessWidget {
                                 color: Colors.green,
                                 child: Column(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 16,
                                     ),
                                     LinearProgressIndicator(
@@ -434,12 +434,12 @@ class ShowNote extends StatelessWidget {
                                         IconButton(
                                             onPressed: () async {
                                               if (!audioController
-                                                  .isPlaying.value)
+                                                  .isPlaying.value) {
                                                 await audioController
                                                     .startPlayerFromURL(
                                                         audioController
                                                             .urlAudioTmp.value);
-                                              else {
+                                              } else {
                                                 await audioController
                                                     .pausePlayer();
                                               }
@@ -452,15 +452,15 @@ class ShowNote extends StatelessWidget {
                                             onPressed: () {
                                               audioController.stopPlayer();
                                             },
-                                            icon: Icon(Icons.stop)),
+                                            icon: const Icon(Icons.stop)),
                                         IconButton(
                                             onPressed: () async {
                                               await showDialog(
                                                   context: context,
                                                   builder: (context) {
                                                     return AlertDialog(
-                                                      title: Text("Xóa?"),
-                                                      content: Text(
+                                                      title: const Text("Xóa?"),
+                                                      content: const Text(
                                                           "Bạn có chắc chắn muốn xóa?"),
                                                       actions: <Widget>[
                                                         TextButton(
@@ -468,7 +468,7 @@ class ShowNote extends StatelessWidget {
                                                               Navigator.of(
                                                                       context)
                                                                   .pop(false),
-                                                          child: Text("Không"),
+                                                          child: const Text("Không"),
                                                         ),
                                                         TextButton(
                                                           onPressed: () {
@@ -479,19 +479,19 @@ class ShowNote extends StatelessWidget {
                                                                     context)
                                                                 .pop(true);
                                                           },
-                                                          child: Text("Có"),
+                                                          child: const Text("Có"),
                                                         ),
                                                       ],
                                                     );
                                                   });
                                             },
-                                            icon: Icon(Icons.close)),
+                                            icon: const Icon(Icons.close)),
                                       ],
                                     ),
                                   ],
                                 ),
                               )
-                            : SizedBox())
+                            : const SizedBox())
                       ],
                     ),
                   ),
@@ -504,8 +504,8 @@ class ShowNote extends StatelessWidget {
           onPressed: () {
             saveNote(context);
           },
-          label: Text("Lưu"),
-          icon: Icon(Icons.save),
+          label: const Text("Lưu"),
+          icon: const Icon(Icons.save),
         ));
   }
 
@@ -517,7 +517,7 @@ class ShowNote extends StatelessWidget {
     } else {
       if (isDeletepaint) drawController.paint.value = null;
       if (isDeleteaudio) audioController.audioFile.value = null;
-      if (checkIn || imageUrl.value != "")
+      if (checkIn || imageUrl.value != "") {
         Database().updateNote(
             authController.user!.uid,
             titleController.text,
@@ -526,7 +526,7 @@ class ShowNote extends StatelessWidget {
             File(imageUrl.value),
             audioController.audioFile.value,
             drawController.paint.value);
-      else
+      } else {
         Database().updateNote(
             authController.user!.uid,
             titleController.text,
@@ -535,6 +535,7 @@ class ShowNote extends StatelessWidget {
             null,
             audioController.audioFile.value,
             drawController.paint.value);
+      }
       Get.back();
       titleController.clear();
       bodyController.clear();
@@ -573,7 +574,7 @@ void showDeleteDialog(BuildContext context, noteData) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         title: Text(
           "Xóa ghi chú?",
@@ -613,7 +614,7 @@ void showSameContentDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         title: Text(
           "Không có gì thay đổi!",

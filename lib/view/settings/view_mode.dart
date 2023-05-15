@@ -9,7 +9,7 @@ class ViewMode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Chế độ xem",
           style: TextStyle(
             fontSize: 24,
@@ -20,17 +20,17 @@ class ViewMode extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 10,
             horizontal: 16,
           ),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                 ),
                 onTap: () {
@@ -41,15 +41,15 @@ class ViewMode extends StatelessWidget {
                   Icons.list,
                   color: Theme.of(context).iconTheme.color,
                 ),
-                title: Text("Xem dưới chế độ danh sách"),
+                title: const Text("Xem dưới chế độ danh sách"),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
                   color: Theme.of(context).iconTheme.color,
                 ),
               ),
-              Divider(),
+              const Divider(),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                 ),
                 onTap: () {
@@ -60,7 +60,7 @@ class ViewMode extends StatelessWidget {
                   Icons.grid_view_sharp,
                   color: Theme.of(context).iconTheme.color,
                 ),
-                title: Text("Xem dưới chế độ lưới"),
+                title: const Text("Xem dưới chế độ lưới"),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
                   color: Theme.of(context).iconTheme.color,

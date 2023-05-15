@@ -14,11 +14,11 @@ class Info extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: SafeArea(
           child: Container(
               child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 10,
           horizontal: 16,
         ),
@@ -31,10 +31,10 @@ class Info extends StatelessWidget {
             height: 160,
             child: Image.asset("assets/image/logo.jpg"),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
-          Text(
+          const Text(
             "Ứng dụng này được xây dựng nhằm mục đích học tập\nĐược xây dựng bởi Phạm Công Thiệp",
             style: TextStyle(
               fontSize: 20,

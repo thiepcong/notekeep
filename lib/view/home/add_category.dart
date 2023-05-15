@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:note_project/controllers/auth_controller.dart';
 import 'package:note_project/controllers/note_controler.dart';
-import 'package:note_project/models/note.dart';
 import 'package:note_project/services/database.dart';
 
 class AddListPage extends StatelessWidget {
@@ -19,7 +18,7 @@ class AddListPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Thêm ghi chú",
           style: TextStyle(
             fontSize: 24,
@@ -31,12 +30,12 @@ class AddListPage extends StatelessWidget {
       body: SafeArea(
         child: Container(
           height: size.height,
-          padding: EdgeInsets.all(
+          padding: const EdgeInsets.all(
             16.0,
           ),
           child: Column(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -45,15 +44,15 @@ class AddListPage extends StatelessWidget {
                 controller: titleController,
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration.collapsed(
+                decoration: const InputDecoration.collapsed(
                   hintText: "Tiêu đề ghi chú",
                 ),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 26.0,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Column(
@@ -62,10 +61,10 @@ class AddListPage extends StatelessWidget {
                     controller: categoryController,
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
-                    decoration: InputDecoration.collapsed(
+                    decoration: const InputDecoration.collapsed(
                       hintText: "Nhập danh mục",
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20.0,
                     ),
                     onFieldSubmitted: (value) {
@@ -89,7 +88,7 @@ class AddListPage extends StatelessWidget {
           saveNote(context);
         },
         tooltip: "Lưu",
-        child: Icon(
+        child: const Icon(
           Icons.save,
           size: 30,
         ),
@@ -104,10 +103,10 @@ class AddListPage extends StatelessWidget {
         controller: newCategoryController,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.words,
-        decoration: InputDecoration.collapsed(
+        decoration: const InputDecoration.collapsed(
           hintText: "Nhập danh mục",
         ),
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20.0,
         ),
         onFieldSubmitted: (value) {
@@ -119,7 +118,7 @@ class AddListPage extends StatelessWidget {
     );
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
   }
@@ -142,7 +141,7 @@ void showEmptyTitleDialog(BuildContext context) {
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: Theme.of(context).backgroundColor,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(10.0),
           ),
