@@ -25,7 +25,7 @@ class Login extends StatelessWidget {
               children: <Widget>[
                 Container(
                   height: 160,
-                  child: Image.asset("assets/image/logomain.png"),
+                  child: Image.asset("assets/image/logo1.png"),
                 ),
                 const Text(
                   'Đăng nhập',
