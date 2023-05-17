@@ -24,8 +24,8 @@ class Login extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                  height:160,
-                  child:Image.asset("assets/image/logo1.png"),
+                  height: 160,
+                  child: Image.asset("assets/image/logomain.png"),
                 ),
                 const Text(
                   'Đăng nhập',

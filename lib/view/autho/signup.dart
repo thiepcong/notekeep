@@ -22,8 +22,8 @@ class SignUp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 SizedBox(
-                  height:160,
-                  child:Image.asset("assets/image/logo1.png"),
+                  height: 160,
+                  child: Image.asset("assets/image/logomain.png"),
                 ),
                 const Text(
                   'Đăng ký',
@@ -47,9 +47,9 @@ class SignUp extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: "Tên đầy đủ",
                             prefixIcon: const Icon(
-                                Icons.account_box,
-                                color: Colors.grey,
-                              ),
+                              Icons.account_box,
+                              color: Colors.grey,
+                            ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Theme.of(context).buttonColor,
@@ -89,9 +89,9 @@ class SignUp extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: "Email",
                             prefixIcon: const Icon(
-                                Icons.email,
-                                color: Colors.grey,
-                              ),
+                              Icons.email,
+                              color: Colors.grey,
+                            ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Theme.of(context).buttonColor,
@@ -120,9 +120,9 @@ class SignUp extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: "Mật khẩu",
                             prefixIcon: const Icon(
-                                Icons.lock,
-                                color: Colors.grey,
-                              ),
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Theme.of(context).buttonColor,
