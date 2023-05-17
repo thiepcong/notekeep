@@ -38,10 +38,7 @@ class ShowNote extends StatelessWidget {
     if (noteData.imageUrl != null && noteData.imageUrl != "") {
       imageUrl.value = noteData.imageUrl!;
     }
-    if (drawController.paintUrl.value != null &&
-        drawController.paintUrl.value != "") {
-      paintUrl.value = drawController.paintUrl.value;
-    } else if (noteData.paintUrl != null && noteData.paintUrl != "") {
+    if (noteData.paintUrl != null && noteData.paintUrl != "") {
       paintUrl.value = noteData.paintUrl!;
       drawController.paintUrl.value = noteData.paintUrl!;
     }
@@ -66,13 +63,13 @@ class ShowNote extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  DateTime selectedDate = datecontroller.selectedDate.value;
-                  TimeOfDay selectedTime = datecontroller.selectedTime.value;
+                  // DateTime selectedDate = datecontroller.selectedDate.value;
+                  // TimeOfDay selectedTime = datecontroller.selectedTime.value;
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("Chọn ngày giờ"),
+                          title: const Text("Chọn ngày giờ"),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -81,7 +78,8 @@ class ShowNote extends StatelessWidget {
                                 onTap: () async {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
-                                    initialDate: selectedDate,
+                                    initialDate:
+                                        datecontroller.selectedDate.value,
                                     firstDate: DateTime.now(),
                                     lastDate: DateTime(2100),
                                   );
@@ -109,7 +107,8 @@ class ShowNote extends StatelessWidget {
                                   final TimeOfDay? picked =
                                       await showTimePicker(
                                     context: context,
-                                    initialTime: selectedTime,
+                                    initialTime:
+                                        datecontroller.selectedTime.value,
                                   );
                                   if (picked != null) {
                                     datecontroller.updateSelectedTime(picked);
@@ -155,11 +154,11 @@ class ShowNote extends StatelessWidget {
                                 // Tạo thông báo
                                 final DateTime now = DateTime.now();
                                 final DateTime scheduledDate = DateTime(
-                                    selectedDate.year,
-                                    selectedDate.month,
-                                    selectedDate.day,
-                                    selectedTime.hour,
-                                    selectedTime.minute);
+                                    datecontroller.selectedDate.value.year,
+                                    datecontroller.selectedDate.value.month,
+                                    datecontroller.selectedDate.value.day,
+                                    datecontroller.selectedTime.value.hour,
+                                    datecontroller.selectedTime.value.minute);
 
                                 if (scheduledDate.isAfter(now)) {
                                   final AndroidNotificationDetails
@@ -192,8 +191,8 @@ class ShowNote extends StatelessWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                        'Thông báo sẽ hiển thị lúc \n ${scheduledDate}'),
-                                    duration: Duration(seconds: 2),
+                                        'Thông báo sẽ hiển thị lúc \n $scheduledDate'),
+                                    duration: const Duration(seconds: 2),
                                   ),
                                 );
                                 Get.back();
@@ -228,15 +227,15 @@ class ShowNote extends StatelessWidget {
           items: [
             const BottomNavigationBarItem(
               icon: Icon(Icons.camera_alt),
-              label: 'Chụp hình ảnh',
+              label: 'Chụp ảnh',
             ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.image),
-              label: 'Thêm hình ảnh',
+              label: 'Thêm ảnh',
             ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.music_note),
-              label: 'Thêm âm thanh',
+              label: 'Ghi âm',
             ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.brush),
@@ -283,9 +282,9 @@ class ShowNote extends StatelessWidget {
                         Stack(
                           children: [
                             Obx(() {
-                              if (checkIn)
+                              if (checkIn) {
                                 return Image.file(File(imageUrl.value));
-                              else if (imageUrl.value != "")
+                              } else if (imageUrl.value != "") {
                                 return Image.network(
                                   imageUrl.value,
                                   fit: BoxFit.cover,
@@ -293,12 +292,12 @@ class ShowNote extends StatelessWidget {
                                       (context, child, loadingProgress) =>
                                           loadingProgress == null
                                               ? child
-                                              : Center(
+                                              : const Center(
                                                   child:
                                                       CircularProgressIndicator(),
                                                 ),
                                 );
-                              else {
+                              } else {
                                 return const SizedBox();
                               }
                             }),
@@ -340,8 +339,7 @@ class ShowNote extends StatelessWidget {
                         ),
                         Stack(
                           children: [
-                            Obx(() => (drawController.paintUrl.value != "" &&
-                                    drawController.paintUrl.value != null)
+                            Obx(() => (drawController.paintUrl.value != "")
                                 ? Image.network(
                                     (drawController.paintUrl.value == "")
                                         ? paintUrl.value
@@ -528,12 +526,16 @@ class ShowNote extends StatelessWidget {
   void saveNote(BuildContext context) async {
     if (titleController.text == noteData.title &&
         bodyController.text == noteData.body &&
-        imageUrl.value == noteData.imageUrl) {
+        imageUrl.value == noteData.imageUrl &&
+        paintUrl.value == noteData.paintUrl &&
+        audioUrl.value == noteData.audioUrl &&
+        paintUrl.value == drawController.paintUrl.value &&
+        audioUrl.value == audioController.urlAudioTmp.value) {
       showSameContentDialog(context);
     } else {
       if (isDeletepaint) drawController.paint.value = null;
       if (isDeleteaudio) audioController.audioFile.value = null;
-      if (checkIn || imageUrl.value != "") {
+      if (checkIn) {
         Database().updateNote(
             authController.user!.uid,
             titleController.text,
@@ -541,7 +543,11 @@ class ShowNote extends StatelessWidget {
             noteData.id,
             File(imageUrl.value),
             audioController.audioFile.value,
-            drawController.paint.value);
+            drawController.paint.value,
+            imageUrl.value,
+            audioUrl.value,
+            paintUrl.value);
+        print("da co anh");
       } else {
         Database().updateNote(
             authController.user!.uid,
@@ -550,14 +556,13 @@ class ShowNote extends StatelessWidget {
             noteData.id,
             null,
             audioController.audioFile.value,
-            drawController.paint.value);
+            drawController.paint.value,
+            imageUrl.value,
+            audioUrl.value,
+            paintUrl.value);
+        print("khong co anh");
       }
       Get.back();
-      titleController.clear();
-      bodyController.clear();
-      imageUrl.value = "";
-      paintUrl.value = "";
-      audioUrl.value = "";
     }
   }
 
@@ -567,7 +572,6 @@ class ShowNote extends StatelessWidget {
     if (pickedFile != null) {
       imageUrl.value = pickedFile.path;
       checkIn = true;
-      print(imageUrl.value);
     }
   }
 

@@ -80,30 +80,47 @@ class Database {
     }
   }
 
-  Future<void> updateNote(String uid, String title, String body, String id,
-      File? image, File? audio, Uint8List? bytes) async {
+  Future<void> updateNote(
+      String uid,
+      String title,
+      String body,
+      String id,
+      File? image,
+      File? audio,
+      Uint8List? bytes,
+      String imageUrl,
+      String audioUrl,
+      String paintUrl) async {
+    var noteData = {
+      "id": id,
+      "title": title,
+      "body": body,
+      "creationDate": Timestamp.now(),
+    };
     try {
-      var noteData = {
-        "id": id,
-        "title": title,
-        "body": body,
-        "creationDate": Timestamp.now(),
-      };
       if (image != null) {
-        // Upload hình ảnh mới vào Firebase Storage
         Reference storageReference =
             FirebaseStorage.instance.ref().child('images/$uid/$id.jpg');
         UploadTask uploadTask = storageReference.putFile(image);
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
         String imageUrl = await taskSnapshot.ref.getDownloadURL();
         noteData["imageUrl"] = imageUrl;
-      } else if (audio != null) {
+      } else {
+        if (imageUrl != "") {
+          noteData["imageUrl"] = imageUrl;
+        }
+      }
+      if (audio != null) {
         Reference ref = _storage.ref().child('audio/$uid/$id.mp3');
         UploadTask uploadTask = ref.putFile(audio);
         await uploadTask.whenComplete(() async {
           String audioUrl = await ref.getDownloadURL();
           noteData["audioUrl"] = audioUrl;
         });
+      } else {
+        if (audioUrl != "") {
+          noteData["audioUrl"] = audioUrl;
+        }
       }
       if (bytes != null) {
         final FirebaseStorage storage = FirebaseStorage.instance;
@@ -112,6 +129,10 @@ class Database {
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
         String paintUrl = await taskSnapshot.ref.getDownloadURL();
         noteData["paintUrl"] = paintUrl;
+      } else {
+        if (paintUrl != "") {
+          noteData["paintUrl"] = paintUrl;
+        }
       }
       await _firestore
           .collection(userCollection)

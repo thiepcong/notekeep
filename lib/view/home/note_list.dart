@@ -116,6 +116,11 @@ class NoteList extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Obx(() =>
+                            (noteController.notes[index].audioUrl != null &&
+                                    noteController.notes[index].audioUrl != "")
+                                ? Icon(Icons.music_note)
+                                : const SizedBox()),
                         Text(
                           formattedDate,
                           style: TextStyle(
