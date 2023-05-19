@@ -100,8 +100,8 @@ class AddNotePage extends StatelessWidget {
                                   builder: (context) {
                                     return AlertDialog(
                                       title: const Text("Xóa?"),
-                                      content:
-                                          const Text("Bạn có chắc chắn muốn xóa?"),
+                                      content: const Text(
+                                          "Bạn có chắc chắn muốn xóa?"),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
@@ -150,8 +150,8 @@ class AddNotePage extends StatelessWidget {
                                   builder: (context) {
                                     return AlertDialog(
                                       title: const Text("Xóa?"),
-                                      content:
-                                          const Text("Bạn có chắc chắn muốn xóa?"),
+                                      content: const Text(
+                                          "Bạn có chắc chắn muốn xóa?"),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
@@ -216,6 +216,21 @@ class AddNotePage extends StatelessWidget {
                                 const SizedBox(
                                   height: 16,
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      audioController.handle.value.toString(),
+                                      style: const TextStyle(fontSize: 24),
+                                    ),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
                                 LinearProgressIndicator(
                                   value: audioController.progress.value,
                                 ),
@@ -224,15 +239,14 @@ class AddNotePage extends StatelessWidget {
                                   children: [
                                     IconButton(
                                         onPressed: () async {
-                                          if (!audioController.isPlaying.value) {
+                                          if (!audioController
+                                              .isPlaying.value) {
                                             await audioController
                                                 .startPlayerFromURL(
                                                     audioController
                                                         .urlAudioTmp.value);
                                           } else {
                                             await audioController.pausePlayer();
-                                            await audioController
-                                                .seekToPlayer(500);
                                           }
                                         },
                                         icon: Icon(
@@ -258,7 +272,8 @@ class AddNotePage extends StatelessWidget {
                                                       onPressed: () =>
                                                           Navigator.of(context)
                                                               .pop(false),
-                                                      child: Text("Không"),
+                                                      child:
+                                                          const Text("Không"),
                                                     ),
                                                     TextButton(
                                                       onPressed: () {

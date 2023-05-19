@@ -1,3 +1,4 @@
+
 import 'package:get/get.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,10 +9,13 @@ class AudioController extends GetxController {
   RxString urlAudioTmp = "".obs;
   final progress = 0.0.obs;
   var position = 0.0.obs;
+  final volume = 3.0.obs;
+  RxDouble handle = 0.0.obs;
   bool isRecoderReady = false;
   RxBool isRecording = false.obs;
   RxBool isPlaying = false.obs;
   Rx<Duration> duration = Duration.zero.obs;
+  Rx<Duration> durationPlayer = Duration.zero.obs;
   final recorder = FlutterSoundRecorder();
   final player = FlutterSoundPlayer();
   @override
@@ -52,12 +56,17 @@ class AudioController extends GetxController {
       while (isRecording.value) {
         final elapsed = DateTime.now().difference(startTime);
         duration.value = Duration(milliseconds: elapsed.inMilliseconds);
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
       }
     } catch (err) {
       isRecording.value = false;
       rethrow;
     }
+  }
+
+  void setVolume(double volumeValue) {
+    player.setVolume(volumeValue);
+    volume.value = volumeValue;
   }
 
   // Future<File?>
@@ -67,15 +76,16 @@ class AudioController extends GetxController {
     audioFile.value = File(path!);
     duration.value = Duration.zero;
     isRecording.value = false;
-    print("audio file" + audioFile.toString());
   }
 
   Future<void> startPlayerFromURL(String url) async {
     await player.openPlayer();
+
     player.setSubscriptionDuration(const Duration(milliseconds: 100));
     player.onProgress!.listen((event) {
       progress.value = event.position.inMilliseconds.toDouble() /
           event.duration.inMilliseconds.toDouble();
+      handle.value = event.position.inMilliseconds.toDouble() / 1000;
     });
     await player.startPlayer(
       fromURI: url,
@@ -83,18 +93,24 @@ class AudioController extends GetxController {
     isPlaying.value = true;
   }
 
+  Future<double> getAudioDurationFromURL(String url) async {
+    final player = FlutterSoundPlayer();
+    await player.openPlayer();
+    final info = await player.startPlayer(fromURI: url);
+    await player.stopPlayer();
+    return info!.inMilliseconds.toDouble();
+  }
+
   Future<void> pausePlayer() async {
     await player.pausePlayer();
     isPlaying.value = false;
   }
 
-  Future<void> seekToPlayer(int millisecond) async {
-    await player.seekToPlayer(Duration(milliseconds: millisecond));
-  }
-
   void stopPlayer() {
     player.stopPlayer();
+    isPlaying.value = false;
     progress.value = 0.0;
+    handle.value = 0;
   }
 
   @override

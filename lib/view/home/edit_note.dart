@@ -63,8 +63,6 @@ class ShowNote extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  // DateTime selectedDate = datecontroller.selectedDate.value;
-                  // TimeOfDay selectedTime = datecontroller.selectedTime.value;
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -432,6 +430,22 @@ class ShowNote extends StatelessWidget {
                                   children: [
                                     const SizedBox(
                                       height: 16,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          audioController.handle.value
+                                              .toString(),
+                                          style: const TextStyle(fontSize: 24),
+                                        ),
+                                        const SizedBox(
+                                          width: 16,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
                                     ),
                                     LinearProgressIndicator(
                                       value: audioController.progress.value,
